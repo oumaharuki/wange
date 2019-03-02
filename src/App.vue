@@ -10,6 +10,7 @@
 
 <script>
 import {mapGetters,mapActions} from "vuex"
+import {index} from "api"
 export default {
   name: 'App',
   computed:{
@@ -20,6 +21,7 @@ export default {
   },
   created(){
     this.set("aaa")
+    console.log(index);
   },
   mounted(){
     console.log("mounted",this.data);
