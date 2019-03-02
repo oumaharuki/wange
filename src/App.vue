@@ -1,10 +1,7 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png" @click="hanldClick">
+    <!-- <img src="./assets/logo.png" @click="hanldClick"> -->
     <router-view/>
-    <div class="demo">
-      aaa
-    </div>
   </div>
 </template>
 
