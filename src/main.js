@@ -6,7 +6,7 @@ import store from './store'
 import { Radio, Icon, RadioGroup } from 'iview'
 import VueRouter from 'vue-router'
 import 'iview/dist/styles/iview.css'
-import 'assets/reset.css'
+import 'assets/reset.styl'
 
 Vue.config.productionTip = false
 
