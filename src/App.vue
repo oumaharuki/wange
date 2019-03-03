@@ -7,7 +7,8 @@
 
 <script>
 import {mapGetters,mapActions} from "vuex"
-import {index} from "api"
+import {catsApi} from "api"
+import {cats} from "api/cats"
 export default {
   name: 'App',
   computed:{
@@ -18,7 +19,7 @@ export default {
   },
   created(){
     this.set("aaa")
-    console.log(index);
+    this.init()
   },
   mounted(){
     console.log("mounted",this.data);
@@ -32,6 +33,11 @@ export default {
     }),
     hanldClick(){
       this.set("aaa")
+    },
+    async init(){
+      await cats(catsApi).then((res)=>{
+        console.log(res);
+      })
     }
   }
 }
