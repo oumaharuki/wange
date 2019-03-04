@@ -9,7 +9,7 @@
         <p>{{skinName}}</p>
       </div>
     </div>
-    <div class="modal" v-if="modelShow">
+    <div class="modal" v-if="modelShow" @click='modelShow=false'>
       <div>
         <p v-for="item in skinList" @click="setSkin(item)" :key="item.value">{{item.name}}</p>
       </div>
@@ -76,7 +76,6 @@ export default {
   components: {
     Top
   },
-  created: {},
   methods: {
     setSkin(data) {
       window.localStorage.setItem("skin", data.value);
