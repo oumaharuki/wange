@@ -1,6 +1,6 @@
 <template>
     <div class="home-page">
-      <div class="home-head">head</div>
+      <div class="home-head" :style="{background: bg}">head</div>
       <div class="home-main">
         <router-view/>
       </div>
@@ -16,7 +16,16 @@
 <script>
 import HomeBottom from './components/homeBottom'
     export default {
-        name: "home",
+      name: "home",
+      data() {
+        return {
+          bg: ''
+        }
+      },
+      created() {
+        const getSkin = window.localStorage.getItem('skin')
+        this.bg = getSkin || '#000108'
+      },
       components:{
         HomeBottom
       }
@@ -31,7 +40,6 @@ import HomeBottom from './components/homeBottom'
   flex-direction column
   .home-head
     flex  0 0  px2rem(150)
-    background red
   .home-main
     display  flex
     flex  1

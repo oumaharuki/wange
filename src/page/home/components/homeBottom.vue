@@ -1,23 +1,41 @@
 <template>
     <div class="box">
-      <router-link class="box-item" to="/">
-        <Icon type="ios-bookmarks" class="box-item-icon" size="25"/>
-        书架
-      </router-link>
-      <router-link class="box-item" to="/home/bookStore">
-        <Icon type="ios-bookmarks" class="box-item-icon" size="25"/>
-        书城
-      </router-link>
-      <router-link class="box-item" to="/">
-        <Icon type="ios-bookmarks" class="box-item-icon" size="25"/>
-        发现
+      <router-link class="box-item" :to="item.link" :key=item.icon v-for="item in navList" :style="{color: bg}">
+        <Icon :type="item.icon" class="box-item-icon" size="25" />
+        {{item.name}}
       </router-link>
     </div>
 </template>
 
 <script>
     export default {
-        name: "homeBottom"
+      name: "homeBottom",
+      data() {
+        return {
+          bg: '',
+          navList: [
+            {
+              name: '书架',
+              icon: 'md-bookmarks',
+              link: '/home/bookcase'
+            },
+            {
+              name: '书城',
+              icon: 'ios-archive',
+              link: '/home/bookStore'
+            },
+            {
+              name: '发现',
+              icon: 'md-compass',
+              link: '/home/find'
+            }
+          ]
+        }
+      },
+      created() {
+        const getSkin = window.localStorage.getItem('skin')
+        this.bg = getSkin || '#000108'
+      }
     }
 </script>
 

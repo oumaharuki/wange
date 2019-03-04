@@ -1,3 +1,3 @@
-export let data=(state)=> {
-    return state.data;
+export let data = state => {
+  return state.data
 }

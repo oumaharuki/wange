@@ -44,6 +44,7 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+@import "./assets/reset.styl"
 #app
   display flex
   flex-direction: column;

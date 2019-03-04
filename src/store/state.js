@@ -1,3 +1,7 @@
 export default {
-    data: null,
+  data: null,
+  pageSet: {
+    bg: '',
+    gender: ''
+  }
 }
