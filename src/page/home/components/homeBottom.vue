@@ -1,9 +1,14 @@
 <template>
     <div class="box">
-      <router-link class="box-item" :to="item.link" :key=item.icon v-for="item in navList" :style="{color: bg}">
+      <div
+        :class="active === index ? className + ' box-item' : 'box-item'"
+        @click="to(item.link, index)"
+        :key=item.icon
+        v-for="(item, index) in navList"
+        :style="{color: bg}">
         <Icon :type="item.icon" class="box-item-icon" size="25" />
         {{item.name}}
-      </router-link>
+      </div>
     </div>
 </template>
 
@@ -13,6 +18,8 @@
       data() {
         return {
           bg: '',
+          className: '',
+          active: 1,
           navList: [
             {
               name: '书架',
@@ -34,12 +41,22 @@
       },
       created() {
         const getSkin = window.localStorage.getItem('skin')
+        const getActive = window.localStorage.getItem('active')
         this.bg = getSkin || '#000108'
+        this.className = getActive || ''
+        console.log(this.className)
+      },
+      methods: {
+        to(link, index) {
+          this.$router.push(link)
+          this.active = index
+        }
       }
     }
 </script>
 
 <style lang="stylus" scoped>
+@import "../../../assets/link-active.styl"
 .box
   display flex
   flex-direction row
@@ -49,9 +66,4 @@
     justify-content center
     align-items center
     flex-direction column
-
-
-
-
-
 </style>

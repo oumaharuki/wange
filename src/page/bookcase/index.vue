@@ -5,21 +5,7 @@
 </template>
 <script>
 export default {
-  name: 'bookcase',
-  data() {
-    return {
-
-    }
-  },
-  created() {
-
-  },
-  methods: {
-
-  },
-  watch: {
-      
-  }
+  name: 'bookcase'
 }
 </script>
 <style lang="stylus">
