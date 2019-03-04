@@ -35,9 +35,9 @@ export default {
       this.set("aaa")
     },
     async init(){
-      await cats(catsApi).then((res)=>{
-        console.log(res);
-      })
+      // await cats(catsApi).then((res)=>{
+      //   console.log(res);
+      // })
     }
   }
 }
