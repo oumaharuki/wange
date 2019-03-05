@@ -1,0 +1,89 @@
+{
+  "data": [
+    {
+      "_id": "5c789820a136501e037480d9",
+      "__v": 0,
+      "type": "c-bookdetail",
+      "link": "5aa252f29ceee11e1136ed13",
+      "fullDes": "重生九零：萌媳宠上天",
+      "simpleDes": "重生九零：萌媳宠上天",
+      "img": "http://statics.zhuishushenqi.com/recommendPage/155140711743091",
+      "title": "重生九零：萌媳宠上天",
+      "order": 1,
+      "node": {
+        "_id": "591284964e7760c035fec2cf",
+        "order": 1,
+        "sex": "none"
+      },
+      "page": "5910018c8094b1e228e5868f",
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    {
+      "_id": "5c789841861293480426ec74",
+      "__v": 0,
+      "type": "c-bookdetail",
+      "link": "5ad0d52b3ee22f2527a13aaf",
+      "fullDes": "总裁撩妻：宝贝娶一送一",
+      "simpleDes": "总裁撩妻：宝贝娶一送一",
+      "img": "http://statics.zhuishushenqi.com/recommendPage/155140716030111",
+      "title": "总裁撩妻：宝贝娶一送一",
+      "order": 2,
+      "node": {
+        "_id": "591284964e7760c035fec2cf",
+        "order": 1,
+        "sex": "none"
+      },
+      "page": "5910018c8094b1e228e5868f",
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    {
+      "_id": "5c78986ae14fec59083dc5e7",
+      "__v": 0,
+      "type": "c-bookdetail",
+      "link": "590084ef56812b62481b8cd1",
+      "fullDes": "我家后山成了仙界垃圾场",
+      "simpleDes": "我家后山成了仙界垃圾场",
+      "img": "http://statics.zhuishushenqi.com/recommendPage/155140719294469",
+      "title": "我家后山成了仙界垃圾场",
+      "order": 3,
+      "node": {
+        "_id": "591284964e7760c035fec2cf",
+        "order": 1,
+        "sex": "none"
+      },
+      "page": "5910018c8094b1e228e5868f",
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    {
+      "_id": "5c78988f861293480426ec75",
+      "__v": 0,
+      "type": "c-bookdetail",
+      "link": "5950ce4f8a0d38ac66daa68c",
+      "fullDes": "逐天大帝",
+      "simpleDes": "逐天大帝",
+      "img": "http://statics.zhuishushenqi.com/recommendPage/155140723167624",
+      "title": "逐天大帝",
+      "order": 4,
+      "node": {
+        "_id": "591284964e7760c035fec2cf",
+        "order": 1,
+        "sex": "none"
+      },
+      "page": "5910018c8094b1e228e5868f",
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    }
+  ],
+  "ok": true
+}

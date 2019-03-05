@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <!-- <img src="./assets/logo.png" @click="hanldClick"> -->
-    <router-view/>
+    <keep-alive>
+      <router-view/>
+    </keep-alive>
   </div>
 </template>
 
@@ -22,7 +24,6 @@ export default {
     this.init()
   },
   mounted(){
-    console.log("mounted",this.data);
   },
   methods:{
     /*
@@ -35,9 +36,9 @@ export default {
       this.set("aaa")
     },
     async init(){
-      await cats(catsApi).then((res)=>{
-        console.log(res);
-      })
+      // await cats(catsApi).then((res)=>{
+      //   console.log(res);
+      // })
     }
   }
 }

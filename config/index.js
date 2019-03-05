@@ -17,6 +17,13 @@ module.exports = {
         pathRewrite:{
           '^/api':'/'
         }
+      },
+      '/img':{
+        target:'http://www.zhuishushenqi.com',
+        changeOrigin:true,
+        pathRewrite:{
+          '^/img':'/'
+        }
       }
     },
 

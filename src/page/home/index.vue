@@ -43,6 +43,7 @@ import HomeBottom from './components/homeBottom'
   .home-main
     display  flex
     flex  1
+    flex-direction column
   .home-bottom
     flex  0 0  px2rem(150)
 </style>
