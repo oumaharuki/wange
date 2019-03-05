@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <!-- <img src="./assets/logo.png" @click="hanldClick"> -->
-    <router-view/>
+    <keep-alive>
+      <router-view/>
+    </keep-alive>
   </div>
 </template>
 
@@ -22,7 +24,6 @@ export default {
     this.init()
   },
   mounted(){
-    console.log("mounted",this.data);
   },
   methods:{
     /*

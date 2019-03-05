@@ -3,5 +3,11 @@ export default {
   pageSet: {
     bg: '',
     gender: ''
-  }
+  },
+  rankingList:{},
+  male:[],
+  female:[],
+  hotRecommend:[],
+  //hotRecommendListLimit 热门推荐的 limit
+  hotRecommendListLimit:null
 }

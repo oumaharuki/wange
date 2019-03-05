@@ -1,37 +1,71 @@
 <template>
     <div class="recommend-box">
       <div class="recommend-title"><i></i>热门推荐</div>
-      <div class="recommend-main">
-        <div v-for="item in recommendList">
-
-        </div>
+      <div class="recommend-main"  v-if="recommendList.length>0">
+        <book-item v-for="(item,index) in recommendList" :data="item"
+                   class="recommend-book" :class="(index+1)%4==0?'no-margin':''">
+        </book-item>
+        <!--<div v-for="item in recommendList" v-if="recommendList.length>0">-->
+          <!--<img :src="statics+item.cover" alt="">-->
+          <!--<p>{{item.title}}</p>-->
+          <!--<p>{{item.author}}</p>-->
+        <!--</div>-->
       </div>
     </div>
 </template>
 
 <script>
-  import {Get} from "api/bookStore"
-  import {hotRecommendApi} from "api"
+  import {statics} from "api"
+  import {GetRanking,GetHot} from "api/bookStore"
+  import BookItem from "components/bookItem"
+  import {mapGetters,mapActions} from "vuex"
   const ok=true
     export default {
         name: "recommend",
-      data:{
-        recommendList:[]
+      props:["hotRecommend"],
+      components:{
+        BookItem
+      },
+      data(){
+       return {
+         recommendList:[],
+         statics:statics
+       }
+      },
+      beforeCreate(){
+
       },
       created() {
           this.init()
       },
+      computed:{
+        ...mapGetters(["hotRecommendListLimit"])
+      },
       methods:{
+        ...mapActions({
+          sethotRecommendListLimit:"sethotRecommendListLimit"
+        }),
           init(){
-            this.getHotRecommend()
+            this.getHotList()
           },
-          getHotRecommend(){
-            Get(hotRecommendApi).then((res)=>{
+        getHotList(){
+          let recommendList=null;
+          if(this.hotRecommend){
+            GetHot(this.hotRecommend.totalRank).then((res)=>{
               if(res.ok==ok){
-                this.recommendList=res.ranking.books
+                recommendList=res.ranking.books;
+                let limit=this.hotRecommendListLimit
+                if(limit!=null&&recommendList!=null){
+                  recommendList.slice(limit.start,limit.end)
+                  this.recommendList=recommendList
+                  return
+                }
+                this.sethotRecommendListLimit({start:0,end:8})
+                this.recommendList=recommendList.slice(0,8)
               }
             })
           }
+        }
       }
     }
 </script>
@@ -39,8 +73,8 @@
 <style lang="stylus" scoped>
   @import "../../../assets/common.styl"
 .recommend-box
+  padding px2rem(40)
   .recommend-title
-    padding px2rem(40)
     display flex
     flex-direction row
     justify-content flex-start
@@ -52,5 +86,12 @@
       background red
       margin-right px2rem(10)
   .recommend-main
-    padding padding px2rem(40)
+    display flex
+    flex-direction row
+    flex-wrap wrap
+    .recommend-book
+      width px2rem(200)
+      margin-right px2rem(70)
+      &.no-margin
+        margin-right 0
 </style>

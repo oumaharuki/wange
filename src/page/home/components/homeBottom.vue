@@ -44,7 +44,6 @@
         const getActive = window.localStorage.getItem('active')
         this.bg = getSkin || '#000108'
         this.className = getActive || ''
-        console.log(this.className)
       },
       methods: {
         to(link, index) {
