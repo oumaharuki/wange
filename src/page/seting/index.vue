@@ -4,14 +4,21 @@
       <slot>设置</slot>
     </top>
     <div class="seting-list">
-      <div class="seting-item" @click="modelShow = true">
+      <div class="seting-item" @click="skinShow">
         <p>皮肤</p>
-        <p>{{skinName}}</p>
+        <p class="itemName">{{skinName}}</p>
+      </div>
+      <div class="seting-item" @click="setReady">
+        <p>阅读兴趣</p>
+        <p class="itemName">{{interestReady}}</p>
+      </div>
+      <div class="seting-item" @click="clearStorage">
+        <p>清除所有缓存</p>
       </div>
     </div>
     <div class="modal" v-if="modelShow" @click='modelShow=false'>
       <div>
-        <p v-for="item in skinList" @click="setSkin(item)" :key="item.value">{{item.name}}</p>
+        <p v-for="item in modal" @click="setSkin(item)" :key="item.value">{{item.name}}</p>
       </div>
     </div>
   </div>
@@ -24,6 +31,17 @@ export default {
     return {
       skinName: "",
       modelShow: false,
+      interestReady: '',
+      modal: [],
+      gender: [{
+        name: '男',
+        value: 'male',
+        class: ''
+      }, {
+        name: '女',
+        value: 'female',
+        class: ''
+      }],
       skinList: [
         {
           name: "森林绿",
@@ -76,10 +94,35 @@ export default {
   components: {
     Top
   },
+  created() {
+    const user = JSON.parse(window.localStorage.getItem('userInfo') || '{}')
+    this.skinName = user.skinName || '默认'
+    this.interestReady = user.gender === 'male' ? '男' : (user.gender === 'female' ? '女' : '默认')
+  },
   methods: {
     setSkin(data) {
-      window.localStorage.setItem("skin", data.value);
-      window.localStorage.setItem('active', data.class)
+      let user = JSON.parse(window.localStorage.getItem('userInfo') || '{}')
+      if (data.class) {
+        user.skin = data.value
+        user.active = data.class
+        user.skinName = data.name
+      } else {
+        user.gender = data.value
+      }
+      window.localStorage.setItem('userInfo', JSON.stringify(user))
+      window.history.go(0);
+    },
+    skinShow() {
+      this.modelShow = true
+      this.modal = this.skinList
+    },
+    setReady() {
+      this.modelShow = true
+      this.modal = this.gender
+    },
+    clearStorage() {
+      window.localStorage.clear()
+      window.sessionStorage.clear()
       window.history.go(0);
     }
   }
@@ -99,9 +142,15 @@ export default {
 
   p {
     margin: 0.6rem 0.5rem;
+    font-size .8rem;
+    font-weight bolder;
   }
 }
-
+.itemName{
+  color #9b9b9b;
+  font-size .6rem !important;
+  font-weight normal !important;
+}
 .modal {
   position: fixed;
   top: 0;

@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import {mapGetters, mapMutations} from 'vuex'
     export default {
       name: "homeBottom",
       data() {
@@ -39,16 +40,33 @@
           ]
         }
       },
+      activated() {
+        this.active = this.pageIndex
+      },
+      computed: {
+        ...mapGetters(['pageIndex'])
+      },
       created() {
-        const getSkin = window.localStorage.getItem('skin')
-        const getActive = window.localStorage.getItem('active')
-        this.bg = getSkin || '#000108'
-        this.className = getActive || ''
+        const user = JSON.parse(window.localStorage.getItem('userInfo') || '{}')
+        this.bg = user.skin || '#000108'
+        this.className = user.active || ''
+        let reg = new RegExp('/find')
+        reg.test(this.$router.history.current.path) && this.setPageIndex(2)
+        reg = new RegExp('/bookcase')
+        reg.test(this.$router.history.current.path) && this.setPageIndex(0)
       },
       methods: {
         to(link, index) {
           this.$router.push(link)
-          this.active = index
+          this.setPageIndex(index)
+        },
+        ...mapMutations({
+          setPageIndex: 'PAGEINDEX'
+        })
+      },
+      watch: {
+        pageIndex(val) {
+          this.active = val
         }
       }
     }

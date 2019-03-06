@@ -9,5 +9,6 @@ export default {
   female:[],
   hotRecommend:[],
   //hotRecommendListLimit 热门推荐的 limit
-  hotRecommendListLimit:null
+  hotRecommendListLimit:null,
+  pageIndex: 1
 }
