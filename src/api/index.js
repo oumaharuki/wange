@@ -18,3 +18,9 @@ export const booksByCategories = api + '/book/by-categories'
 
 // 获取小说排行榜
 export const ranking = api + '/ranking'
+// 获取小说信息
+export const bookDes = api + '/book'
+// 获取小说章节
+export const atoc = api + '/mix-atoc'
+// 获取小说章节内容
+export const chapterApi = api + 'chapterup.zhuishushenqi.com/chapter/'

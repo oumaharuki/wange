@@ -6,7 +6,7 @@
     <div class="scroll">
       <Scroll class="scroll-ui" :on-reach-bottom="getList">
         <p class="not-book" v-if="books.length === 0">暂无数据……</p>
-        <div v-for="item in books" :key="item.lateleFollower" class="book">
+        <div v-for="item in books" :key="item.lateleFollower" class="book" @click="getBook(item._id)">
           <img :src="statics + item.cover" alt>
           <div>
             <p class="title">{{item.title}}</p>
@@ -86,6 +86,9 @@ export default {
           }
         })
       })
+    },
+    getBook(id) {
+      this.$router.push(`/bookDes/${id}`)
     }
   }
 };
