@@ -3,13 +3,13 @@ import App from './App'
 import router from './router'
 import store from './store'
 // import iView from 'iview'
-import { Radio, Icon, RadioGroup, FormItem, Form, Scroll } from 'iview'
+import { Radio, Icon, RadioGroup, FormItem, Form, Scroll, Message } from 'iview'
 import VueRouter from 'vue-router'
 import 'iview/dist/styles/iview.css'
 import 'assets/reset.styl'
 
 Vue.config.productionTip = false
-
+Vue.prototype.$Message = Message
 Vue.use(VueRouter)
 Vue.component('RadioGroup', RadioGroup)
 Vue.component('Radio', Radio)

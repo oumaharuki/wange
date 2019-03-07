@@ -24,7 +24,7 @@
 </template>
 <script>
 import Top from "components/top-return";
-import { booksByCategories, statics } from "api";
+import { booksByCategories, statics, ranking } from "api";
 import { cats } from "api/cats";
 
 export default {
@@ -47,10 +47,22 @@ export default {
   },
   methods: {
     getList() {
+      const gender = this.$route.params.gender
+      if (gender !== 'female' && gender !== 'male') {
+        return new Promise((resolve) => {
+          this.start === 0 && this.getRank()
+          resolve()
+        })
+      } else {
+        return new Promise((resolve) => {
+          this.getClassify()
+          resolve()
+        })
+      }
+    },
+    getClassify() {
       return new Promise(resolve => {
-        const params = `?gender=${this.$route.params.gender}&type=hot&major=${
-          this.$route.params.major
-        }&minor=&start=${this.start}&limit=20`;
+        const params = `?gender=${this.$route.params.gender}&type=hot&major=${this.$route.params.major}&minor=&start=${this.start}&limit=20`;
         cats(booksByCategories + params).then(res => {
           if (res.ok) {
             this.books.push(...res.books);
@@ -61,6 +73,19 @@ export default {
         });
         resolve();
       });
+    },
+    getRank() {
+      return new Promise(resolve => {
+        const param = `${ranking}/${this.$route.params.gender}`
+        cats(param).then(rankList => {
+          // console.log(rankList, 'list')
+          if (rankList.ok) {
+            this.books.push(...rankList.ranking.books)
+          } else {
+            this.$Message.error('数据异常！！！')
+          }
+        })
+      })
     }
   }
 };
@@ -94,26 +119,25 @@ export default {
 }
 
 .book {
-  display: flex;
+  // display: flex;
   padding: 0 0.5rem;
   margin: 1rem 0;
-
+  position relative;
+  min-height 5.5rem;
   img {
     width: 4rem;
-    height: 6rem;
   }
 
   div {
-    flex: 1;
-    padding-left: 0.5rem;
-    color: #99989b;
+    position absolute;
+    top: 0;
+    left 5rem;
+    right .5rem;
+    bottom 0;
+    // flex: 1;s
+    // padding-left: 0.5rem;
+    // color: #99989b;
     border-bottom: 1px solid #f1f2f7;
-    padding-bottom: 0.5rem;
-
-    &::last-type-of {
-      padding-bottom: 0;
-      border-bottom: 0;
-    }
   }
 
   .title {
@@ -125,7 +149,7 @@ export default {
   .shortIntro {
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 1;
     overflow: hidden;
   }
 

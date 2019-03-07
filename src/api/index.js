@@ -15,3 +15,6 @@ export const statics="http://statics.zhuishushenqi.com"
 
 // 根据分类获取小说列表
 export const booksByCategories = api + '/book/by-categories'
+
+// 获取小说排行榜
+export const ranking = api + '/ranking'
