@@ -23,8 +23,8 @@ import HomeBottom from './components/homeBottom'
         }
       },
       created() {
-        const getSkin = window.localStorage.getItem('skin')
-        this.bg = getSkin || '#000108'
+        const user = JSON.parse(window.localStorage.getItem('userInfo') || '{}')
+        this.bg = user.skin || '#000108'
       },
       components:{
         HomeBottom

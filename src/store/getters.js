@@ -10,3 +10,7 @@ export let male = state => {
 export let hotRecommendListLimit = state => {
   return state.hotRecommendListLimit
 }
+
+export let pageIndex = state => {
+  return state.pageIndex
+}

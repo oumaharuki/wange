@@ -2,7 +2,7 @@
     <div class="recommend-box">
       <div class="recommend-title"><i></i>热门推荐</div>
       <div class="recommend-main"  v-if="recommendList.length>0">
-        <book-item v-for="(item,index) in recommendList" :data="item"
+        <book-item v-for="(item,index) in recommendList" :data="item" :key=index
                    class="recommend-book" :class="(index+1)%4==0?'no-margin':''">
         </book-item>
         <!--<div v-for="item in recommendList" v-if="recommendList.length>0">-->

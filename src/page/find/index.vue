@@ -5,30 +5,6 @@
       <p :style="{color: bg}">{{item.name}}</p>
       <Icon type="ios-arrow-forward" size="18" :color='bg'/>
     </router-link>
-
-    <!-- <router-link to="/bookClassify" class="find-item">
-      <Icon type="ios-menu" size="18"/>
-      <p>分类</p>
-      <Icon type="ios-arrow-forward" size="18"/>
-    </router-link>
-
-    <router-link to="/rank" class="find-item">
-      <Icon type="ios-stats" size="18"/>
-      <p>排行榜</p>
-      <Icon type="ios-arrow-forward" size="18"/>
-    </router-link>
-
-    <router-link to="/seting" class="find-item">
-      <Icon type="md-settings" size='18'/>
-      <p>设置</p>
-      <Icon type="ios-arrow-forward" size="18"/>
-    </router-link>
-
-    <router-link to="/home/find" class="find-item">
-      <Icon type="logo-octocat" size="18"/>
-      <p>更多详情</p>
-      <Icon type="ios-arrow-forward" size="18"/>
-    </router-link> -->
   </div>
 </template>
 <script>
@@ -61,8 +37,8 @@ export default {
     };
   },
   created() {
-    const getSkin = window.localStorage.getItem('skin')
-    this.bg = getSkin || '#000108'
+    const user = JSON.parse(window.localStorage.getItem('userInfo') || '{}')
+    this.bg = user.skin || '#000108'
   }
 };
 </script>
@@ -70,6 +46,7 @@ export default {
 .find-page {
   background-color: #fafafa;
   width: 100%;
+  flex 1;
 }
 
 .find-item {

@@ -17,7 +17,7 @@
 </template>
 <script>
 import Top from "components/top-return";
-import { catsApi, booksByCategories } from "api";
+import { catsApi } from "api";
 import { cats } from "api/cats";
 export default {
   name: "bookClassify",
@@ -58,10 +58,7 @@ export default {
   },
   methods: {
     getBookList(param) {
-      const params = `?gender=${param.gender}&type=hot&major=${param.item.name}&minor=&start=0&limit=20`
-      cats(booksByCategories + params).then(res => {
-        console.log(res)
-      })
+      this.$router.push({path: `/bookClassifyList/${param.gender}/${param.item.name}`})
     }
   }
 };

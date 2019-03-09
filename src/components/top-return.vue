@@ -14,8 +14,8 @@ export default {
     }
   },
   created() {
-    const getSkin = window.localStorage.getItem('skin')
-    this.bg = getSkin || this.bg
+    const user = JSON.parse(window.localStorage.getItem('userInfo') || '{}')
+    this.bg = user.skin || this.bg
   },
   methods: {
     back() {

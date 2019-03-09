@@ -1,9 +1,9 @@
-import { MUTATE,RANKINGLIST,HOTRECOMMENDLISTLIMIT } from './mutation-types';
+import { MUTATE, RANKINGLIST, HOTRECOMMENDLISTLIMIT, PAGEINDEX } from './mutation-types';
 
 export default {
-    [MUTATE](state, { data }) {
-      state.data = data;
-    },
+  [MUTATE](state, { data }) {
+    state.data = data;
+  },
   [RANKINGLIST](state, { data }) {
     state.rankingList = data;
     state.male = data.male;
@@ -12,4 +12,7 @@ export default {
   [HOTRECOMMENDLISTLIMIT](state, { data }) {
     state.data = data;
   },
-};
+  [PAGEINDEX](state, data) {
+    state.pageIndex = data
+  }
+}
