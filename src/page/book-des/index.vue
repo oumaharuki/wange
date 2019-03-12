@@ -86,6 +86,7 @@ export default {
       this.getChapters(start * this.page, end)
     },
     getChapter(item) {
+      console.log(chapterApi + item.link)
       cats(chapterApi + item.link).then(chapterDes => {
         console.log(chapterDes)
       })
