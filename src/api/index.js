@@ -23,4 +23,4 @@ export const bookDes = api + '/book'
 // 获取小说章节
 export const atoc = api + '/mix-atoc'
 // 获取小说章节内容
-export const chapterApi = api + 'chapterup.zhuishushenqi.com/chapter/'
+export const chapterApi = 'http://chapterup.zhuishushenqi.com/chapter/'
