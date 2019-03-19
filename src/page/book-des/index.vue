@@ -68,7 +68,7 @@ export default {
       cats(param).then(des => {
         this.des = des;
       });
-      cats(`${atoc}/${this.$route.params.id}`).then(res => {
+      cats(`${atoc}/${this.$route.params.id}?view=chapters`).then(res => {
         this.chapters = res.mixToc.chapters
         this.total = this.chapters.length
         const end = this.page < this.total ? this.page : this.total
