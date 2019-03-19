@@ -4,6 +4,7 @@ const OK="OK"
 
 const api="api"
 const img="img"
+const chapterup = 'chapterup'
 export const catsApi=api+"/cats/lv2/statistics"
 export const rankingApi=api+"/ranking/gender"
 export const hotRecommendApi=api+"/ranking/54d43437d47d13ff21cad58b"
@@ -23,4 +24,4 @@ export const bookDes = api + '/book'
 // 获取小说章节
 export const atoc = api + '/mix-atoc'
 // 获取小说章节内容
-export const chapterApi = api + '/chapter/'
+export const chapterApi = chapterup + '/chapter/'

@@ -12,17 +12,24 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api':{
-        target:'http://api.zhuishushenqi.com',
-        changeOrigin:true,
-        pathRewrite:{
-          '^/api':'/'
+        target: 'http://api.zhuishushenqi.com',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': '/'
         }
       },
-      '/img':{
-        target:'http://www.zhuishushenqi.com',
-        changeOrigin:true,
-        pathRewrite:{
-          '^/img':'/'
+      '/chapterup': {
+        target: 'http://chapterup.zhuishushenqi.com',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/chapterup': '/'
+        }
+      },
+      '/img': {
+        target: 'http://www.zhuishushenqi.com',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/img': '/'
         }
       }
     },
@@ -35,7 +42,6 @@ module.exports = {
     notifyOnErrors: true,
     poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
 
-    
     /**
      * Source Maps
      */
