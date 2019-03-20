@@ -1,5 +1,5 @@
 <template>
-  <div class="book-box">
+  <div class="book-box" @click="routerPush(data._id)">
     <img :src="statics+data.cover" alt="">
     <p>{{data.title}}</p>
     <p>{{data.author}}</p>
@@ -16,6 +16,12 @@
           statics:statics
         }
       },
+      methods:{
+        routerPush(id){
+          console.log(id);
+          this.$router.push("/bookDes/"+id)
+        }
+      }
     }
 </script>
 
@@ -28,4 +34,8 @@
   img
     width 100%
     height px2rem(300)
+  p
+    overflow hidden
+    text-overflow ellipsis
+    white-space nowrap
 </style>

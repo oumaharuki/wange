@@ -10,6 +10,7 @@ import Seting from 'page/seting'
 import BookClassify from 'page/book-classify'
 import BookClassifyList from 'page/book-classify-list'
 import BookDes from 'page/book-des'
+import bookRead from 'page/bookRead'
 
 Vue.use(Router)
 
@@ -63,6 +64,11 @@ export default new Router({
       path: '/bookDes/:id',
       name: 'bookDes',
       component: BookDes
+    },
+    {
+      path: '/bookRead',
+      name: 'bookRead',
+      component: bookRead
     }
   ]
 })

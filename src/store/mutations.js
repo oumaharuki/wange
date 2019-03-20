@@ -10,7 +10,7 @@ export default {
     state.female = data.female;
   },
   [HOTRECOMMENDLISTLIMIT](state, { data }) {
-    state.data = data;
+    state.hotRecommendListLimit = data;
   },
   [PAGEINDEX](state, data) {
     state.pageIndex = data
