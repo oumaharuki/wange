@@ -11,7 +11,7 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/api':{
+      '/api': {
         target: 'http://api.zhuishushenqi.com',
         changeOrigin: true,
         pathRewrite: {
@@ -19,7 +19,7 @@ module.exports = {
         }
       },
       '/chapterup': {
-        target: 'http://chapterup.zhuishushenqi.com',
+        target: 'http://chapter2.zhuishushenqi.com',
         changeOrigin: true,
         pathRewrite: {
           '^/chapterup': '/'

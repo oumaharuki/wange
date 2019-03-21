@@ -9,6 +9,8 @@ export const cats=(url)=>{
     axios.get(url).then((res)=>{
       res.status==200&&res.statusText==OK?resolve(res.data):
         reject(new Error("cats get erro"))
+    }).catch(err => {
+      console.log(err, 'err')
     })
   })
 }

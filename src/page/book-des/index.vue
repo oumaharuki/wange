@@ -86,10 +86,8 @@ export default {
       this.getChapters(start * this.page, end)
     },
     getChapter(item) {
-      console.log(chapterApi + item.link)
-      cats(chapterApi + item.link).then(chapterDes => {
-        console.log(chapterDes)
-      })
+      window.sessionStorage.setItem('ready-link', item.link)
+      this.$router.push({path: `/ready`})
     }
   }
 };
@@ -157,6 +155,7 @@ export default {
   }
 
   > p {
+    // text-indent: 1.4rem;
     padding: 0.5rem;
   }
 }
