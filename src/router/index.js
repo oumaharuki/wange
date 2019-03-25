@@ -4,6 +4,12 @@ import Home from 'page/home'
 import BookStore from 'page/bookStore'
 import Bookcase from 'page/bookcase'
 import Notice from 'page/notice'
+import Rank from 'page/rank'
+import Seting from 'page/seting'
+import BookClassify from 'page/book-classify'
+import BookClassifyList from 'page/book-classify-list'
+import BookDes from 'page/book-des'
+import bookRead from 'page/bookRead'
 
 Vue.use(Router)
 
@@ -62,6 +68,12 @@ export default new Router({
       path: '/ready',
       name: 'readyDes',
       component: () => import('page/ready-des')
+      component: BookDes
+    },
+    {
+      path: '/bookRead',
+      name: 'bookRead',
+      component: bookRead
     }
   ]
 })

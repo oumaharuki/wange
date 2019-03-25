@@ -7,7 +7,8 @@ import { Radio, Icon, RadioGroup, FormItem, Form, Scroll, Message, Button, BackT
 import VueRouter from 'vue-router'
 import 'iview/dist/styles/iview.css'
 import 'assets/reset.styl'
-
+import $ from 'jquery';
+window.$ = window.jQuery = $
 Vue.config.productionTip = false
 Vue.prototype.$Message = Message
 Vue.use(VueRouter)
