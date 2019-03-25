@@ -3,7 +3,6 @@ import Router from 'vue-router'
 import Home from 'page/home'
 import BookStore from 'page/bookStore'
 import Bookcase from 'page/bookcase'
-import Find from 'page/find'
 import Notice from 'page/notice'
 import Rank from 'page/rank'
 import Seting from 'page/seting'
@@ -32,7 +31,7 @@ export default new Router({
       }, {
         path: '/home/find',
         name: 'find',
-        component: Find
+        component: () => import('page/find')
       }]
     },
     {
@@ -43,26 +42,32 @@ export default new Router({
     {
       path: '/rank',
       name: 'rank',
-      component: Rank
+      component: () => import('page/rank')
     },
     {
       path: '/bookClassify',
       name: 'bookClassify',
-      component: BookClassify
+      component: () => import('page/book-classify')
     },
     {
       path: '/seting',
       name: 'seting',
-      component: Seting
+      component: () => import('page/seting')
     },
     {
       path: '/bookClassifyList/:gender/:major',
       name: 'bookClassifyList',
-      component: BookClassifyList
+      component: () => import('page/book-classify-list')
     },
     {
       path: '/bookDes/:id',
       name: 'bookDes',
+      component: () => import('page/book-des')
+    },
+    {
+      path: '/ready',
+      name: 'readyDes',
+      component: () => import('page/ready-des')
       component: BookDes
     },
     {
