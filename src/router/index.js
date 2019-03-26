@@ -68,7 +68,6 @@ export default new Router({
       path: '/ready',
       name: 'readyDes',
       component: () => import('page/ready-des')
-      component: BookDes
     },
     {
       path: '/bookRead',
