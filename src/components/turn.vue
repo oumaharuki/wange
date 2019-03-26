@@ -1,12 +1,11 @@
 <template>
     <div class="turn-box" id="turn-box">
-      <div>
-          <div v-html="text" id="text" style="padding:30px 20px;position: relative"></div>
+      <div class="turn-box-div">
+          <div v-html="text" id="text" style="padding:30px 20px;"></div>
       </div>
-      <div>
-        <div v-html="text" style="padding:30px 20px"></div>
-      </div><!--<div><span class="text">Page 2</span></div>-->
-      <!--<div><span class="text">Page 3</span></div>-->
+      <div v-if="num.length>0" v-for="(item ,index) in num" :style="{ padding:'30px 20px',left:(index+1)*(-width)}" class="turn-box-div">
+        <div v-html="text" ></div>
+      </div>
     </div>
 </template>
 
@@ -18,7 +17,9 @@
         name: "turn",
       data(){
         return {
-          text:text
+          text:text,
+          num:[],
+          width:0
         }
       },
       mounted(){
@@ -29,23 +30,33 @@
           display: 'single',
           gradients: true,
           // ... plus any extra option you need
-          turning:((event,page ,view )=>{
-              console.log(event, page, view);
-           })
         });
-        console.log($('#text').outerWidth());
-        console.log($('#text').width());
+        // console.log($('#turn-box div').height());
+        // console.log(Math.floor($('#text').height()/$(document).height()));
+        // this.num=new Array(Math.floor($('#text').height()/$(document).height()));
+
+
       },
       created(){
 
         // this.text="<div>"+this.text+"<div/>";
         this.text=this.text.replace(/↵/g,`<div/><div>`);
-        // console.log(this.text);
-        // let node=$("div");
-        // node.css({"columns":300,columnGap:30,fontSize:20,lineHeight:30})
-        // node.html(this.text)
-        // console.log(node.outerWidth());
-        // console.log(node.width());
+        let node=$("div");
+        node.html(this.text)
+        node.css({columns:300,columnGap:30,fontSize:20,lineHeight:"30px",padding: "30px 20px"})
+        $('#turn-box').append(node)
+        console.log(window.innerHeight);
+        let lenth=Math.floor(node.height()/window.innerHeight);
+        if(lenth>1){
+          lenth-=1;
+        }
+        this.num=new Array(lenth);
+        node.css("display","none")
+        console.log( this.num.length);
+        // $('#turn-box').remove(node)
+        console.log(node.height());
+        this.width=window.innerWidth;
+
       },
       methods:{
           init(){
@@ -61,14 +72,16 @@
   height  100vh
   font-size 16px
   line-height 20px
-  div
+  position relative
+  .turn-box-div
+    display inline
     columns 300px
     column-gap 30px
     background red
     font-size 20px
     line-height 30px
     text-indent 25px
-    float left
+
 
 
 
