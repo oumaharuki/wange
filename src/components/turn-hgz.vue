@@ -30,24 +30,23 @@
       }
     },
     created() {
-      const txtIndex = `</br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`
+      const txtIndex = `<p></p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`
       this.screenHeight = window.screen.height
       this.screemWidth = window.screen.width
       const col = Math.floor((this.screemWidth - 40) / this.txtWidth)
-      const row = Math.floor(this.screenHeight / this.lineHeight) - 1
+      const row = Math.floor(this.screenHeight / this.lineHeight)
       const pageTxtNum = col * row
       const page = Math.ceil(this.data.length / pageTxtNum)
       const arr = this.data.split('↵')
-
+      console.log(arr, 'arr')
       this.page = []
 
       let pageLine = 0
       let pageTxt = ''
-      arr.map((item, index) => {
+      arr.length > 1 && arr.map((item, index) => {
         const currentLine = Math.ceil((item.length + 2) / col)
         pageLine += currentLine
         if (pageLine <= row) {
-          console.log(pageLine, 'llll')
           pageTxt += txtIndex + item
         }
 
@@ -57,7 +56,6 @@
           pageTxt = ''
           pageLine = 0
         } else if (pageLine > row) {
-          console.log(pageLine, '>>>')
           const redundant = pageLine - row          
           const str = item
           let end = (currentLine - redundant) * col - 2
@@ -76,7 +74,7 @@
       console.log(this.page)
     },
     mounted() {
-      $('#turn-hgz').turn({
+      this.data && this.page.length > 1 && $('#turn-hgz').turn({
         width: $('#turn-hgz').width(),
         height: $('#turn-hgz').height(),
         autoCenter: false,
@@ -92,11 +90,13 @@
 <style lang='stylus'>
 #turn-hgz
   width  100vw
-  max-height  100vh
-  font-size 16px
+  height  100vh !important
   position relative
   background #fff
   .content
     padding 0 20px
     background #fff
+    br {
+      height 0px !important;
+    }
 </style>
