@@ -1,8 +1,5 @@
 <template>
     <div class="turn-box" id="turn-box">
-      <div class="turn-box-div">
-          <div v-html="text" id="text" style="padding:30px 20px;"></div>
-      </div>
       <div v-if="num.length>0" v-for="(item ,index) in num" :style="{ padding:'30px 20px',left:(index+1)*(-width)}" class="turn-box-div">
         <div v-html="text" ></div>
       </div>
@@ -77,13 +74,8 @@
     display inline
     columns 300px
     column-gap 30px
-    background red
+    background #fff
     font-size 20px
     line-height 30px
     text-indent 25px
-
-
-
-
-
 </style>
