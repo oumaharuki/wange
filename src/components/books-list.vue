@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     getBook(id) {
-      this.$router.push(`/bookDes/${id}`)
+      this.$router.push(`/book-des/${id}`)
     }
   }
 };

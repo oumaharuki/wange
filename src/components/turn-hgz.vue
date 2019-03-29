@@ -30,6 +30,7 @@
       }
     },
     created() {
+      console.log(this.data, 'turn data')
       const txtIndex = `<p></p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`
       this.screenHeight = window.screen.height
       this.screemWidth = window.screen.width
@@ -39,37 +40,40 @@
       const page = Math.ceil(this.data.length / pageTxtNum)
       const arr = this.data.split('↵')
       console.log(arr, 'arr')
+
       this.page = []
 
       let pageLine = 0
       let pageTxt = ''
       arr.length > 1 && arr.map((item, index) => {
-        const currentLine = Math.ceil((item.length + 2) / col)
+        const currentLine = Math.ceil((item.length + 3) / col)
         pageLine += currentLine
         if (pageLine <= row) {
           pageTxt += txtIndex + item
         }
 
         if (pageLine === row) {
-          console.log(pageLine, '===')
+          console.log('===')
           this.page.push(pageTxt)
           pageTxt = ''
           pageLine = 0
         } else if (pageLine > row) {
           const redundant = pageLine - row          
-          const str = item
-          let end = (currentLine - redundant) * col - 2
-          end = end > item.length ? end : -1
-          item = item.slice(0, end)
-          let temporaryStr = str.slice(item.length)
+          const txtIndexNum = item.slice(0, 1) === `"` ? 3 : 4
+          let end = (currentLine - redundant) * col - txtIndexNum
+          
+          const str = end < item.length ? item.slice(0, end) : item.slice(0)
+          let temporaryStr = str.length === item.length ? '' : item.slice(str.length)
 
-          pageTxt += txtIndex + item
-          pageTxt += temporaryStr.length === 1 ? temporaryStr : ''
+          const txt = txtIndex + str
+          pageTxt += txt
+          pageTxt += temporaryStr.length === 1 ? txt.slice(0, -1) : ''
           this.page.push(pageTxt)
-          pageLine = temporaryStr.length === 1 ? 0 : redundant
-          pageTxt = temporaryStr.length === 1 ? '' : temporaryStr
+          pageLine = redundant
+          pageTxt = temporaryStr.length === 1 ? txt.slice(-1) + temporaryStr : temporaryStr
         }
       })
+      console.log(pageTxt, 'txt')
       pageTxt && this.page.push(pageTxt)
       console.log(this.page)
     },
