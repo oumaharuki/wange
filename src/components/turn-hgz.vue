@@ -45,7 +45,7 @@
 
       let pageLine = 0
       let pageTxt = ''
-      arr.length > 1 && arr.map((item, index) => {
+      arr.length > 0 && arr.map((item, index) => {
         const currentLine = Math.ceil((item.length + 3) / col)
         pageLine += currentLine
         if (pageLine <= row) {
@@ -53,7 +53,6 @@
         }
 
         if (pageLine === row) {
-          console.log('===')
           this.page.push(pageTxt)
           pageTxt = ''
           pageLine = 0
@@ -73,7 +72,7 @@
           pageTxt = temporaryStr.length === 1 ? txt.slice(-1) + temporaryStr : temporaryStr
         }
       })
-      console.log(pageTxt, 'txt')
+
       pageTxt && this.page.push(pageTxt)
       console.log(this.page)
     },
