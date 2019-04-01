@@ -1,6 +1,7 @@
 <template>
   <div id='turn-hgz' :style="{'font-size': txtWidth + 'px', 'line-height': lineHeight + 'px'}">
-    <div class="content" v-for='item in page' v-html=item>
+    <div class="content" style="line-height: 21px;" v-html="page">
+
     </div>
   </div>
 </template>
@@ -30,51 +31,40 @@
       }
     },
     created() {
-      console.log(this.data, 'turn data')
-      const txtIndex = `<p></p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`
-      this.screenHeight = window.screen.height
-      this.screemWidth = window.screen.width
+      this.screenHeight = window.innerHeight
+      this.screemWidth = window.innerWidth
       const col = Math.floor((this.screemWidth - 40) / this.txtWidth)
       const row = Math.floor(this.screenHeight / this.lineHeight)
-      const pageTxtNum = col * row
-      const page = Math.ceil(this.data.length / pageTxtNum)
-      const arr = this.data.split('↵')
-      console.log(arr, 'arr')
-
-      this.page = []
-
-      let pageLine = 0
-      let pageTxt = ''
-      arr.length > 0 && arr.map((item, index) => {
-        const currentLine = Math.ceil((item.length + 3) / col)
-        pageLine += currentLine
-        if (pageLine <= row) {
-          pageTxt += txtIndex + item
+      let data=this.data;
+      data="    "+data;
+      data=data.replace(/↵/g,`↵</div><div>    `);
+      let page=[];
+      let start=0;
+      for(let i=0;i<row;i++){
+        let w=0;
+        let num=0;
+        for(let j=0;j<=col;j++){
+          console.log(/↵/.test(data[start + num]));
+          if(/↵/.test(data[start+num])){
+            let str=data.slice(start,start+num);
+            console.log(str);
+            start+=num+1;
+            page.push(str);
+            break;
+          }
+          w+=this.txtWidth;
+          num++;
+          if(w>=this.screemWidth - 40){
+            let str=data.slice(start,start+j);
+            start+=num;
+            page.push(str);
+            break;
+          }
         }
+      }
+      console.log(page);
+      this.page=page.join("").replace(/ /g,`&nbsp`);
 
-        if (pageLine === row) {
-          this.page.push(pageTxt)
-          pageTxt = ''
-          pageLine = 0
-        } else if (pageLine > row) {
-          const redundant = pageLine - row          
-          const txtIndexNum = item.slice(0, 1) === `"` ? 3 : 4
-          let end = (currentLine - redundant) * col - txtIndexNum
-          
-          const str = end < item.length ? item.slice(0, end) : item.slice(0)
-          let temporaryStr = str.length === item.length ? '' : item.slice(str.length)
-
-          const txt = txtIndex + str
-          pageTxt += txt
-          pageTxt += temporaryStr.length === 1 ? txt.slice(0, -1) : ''
-          this.page.push(pageTxt)
-          pageLine = redundant
-          pageTxt = temporaryStr.length === 1 ? txt.slice(-1) + temporaryStr : temporaryStr
-        }
-      })
-
-      pageTxt && this.page.push(pageTxt)
-      console.log(this.page)
     },
     mounted() {
       this.data && this.page.length > 1 && $('#turn-hgz').turn({
