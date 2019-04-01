@@ -55,12 +55,12 @@ export default new Router({
       component: () => import('page/seting')
     },
     {
-      path: '/bookClassifyList/:gender/:major',
+      path: '/book-classify-list/:gender/:major',
       name: 'bookClassifyList',
       component: () => import('page/book-classify-list')
     },
     {
-      path: '/bookDes/:id',
+      path: '/book-des/:id',
       name: 'bookDes',
       component: () => import('page/book-des')
     },

@@ -31,7 +31,7 @@
         </div>
         <div class="chapters">
           <Divider dashed />
-          <p v-for="(item, index) in chapter" :key="index" @click="getChapter(item)">{{item.title}}</p>
+          <chapters :chapter=chapter></chapters>
           <Page :current.sync="current" :total="total" simple @on-change="changePage" :page-size="page" class="page-ui"/>
           <!-- <Divider dashed /> -->
         </div>
@@ -43,10 +43,12 @@
 import Top from "components/top-return";
 import { bookDes, statics, atoc, chapterApi } from "api";
 import { cats } from "api/cats";
+import Chapters from "components/chapters"
 export default {
   name: "bookDes",
   components: {
-    Top
+    Top,
+    Chapters
   },
   data() {
     return {
@@ -84,10 +86,6 @@ export default {
       const start = this.current - 1
       const end = (start + 1) * this.page > this.chapters.length ? this.chapters.length : (start + 1) * this.page
       this.getChapters(start * this.page, end)
-    },
-    getChapter(item) {
-      window.sessionStorage.setItem('ready-link', item.link)
-      this.$router.push({path: `/ready`})
     }
   }
 };
@@ -163,13 +161,6 @@ export default {
 .page-ui{
   input{
     width 3.5rem !important;
-  }
-}
-
-.chapters{
-  padding 0 .5rem;
-  p{
-    margin .5rem 0;
   }
 }
 

@@ -44,7 +44,7 @@ export default {
   methods: {
     getRank(param) {
       const id = param.totalRank || param._id || param.monthRank
-      id && this.$router.push({path: `/bookClassifyList/${id}/${param.shortTitle}`})
+      id && this.$router.push({path: `/book-classify-list/${id}/${param.shortTitle}`})
     }
   }
 };
