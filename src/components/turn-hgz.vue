@@ -24,7 +24,7 @@
         </div>
       <div>
           进度
-        </div>
+      </div>
       <div @click="setClick">
           设置
         </div>
@@ -72,18 +72,15 @@
         screenHeight: 0,
         screemWidth: 0,
         page: [],
-        menuFlag:false,//菜单flag
+        menuFlag: false,//菜单flag
         fontSlider:this.txtWidth,
         img:img1,
         imgs:imgs,
-        setFontFlag:false
+        setFontFlag:false,
+        data: ''
       }
     },
     props: {
-      data: {
-        type: String,
-        default: ''
-      },
       txtWidth: {
         type: Number,
         default: 12
@@ -93,9 +90,8 @@
         default: 18
       }
     },
-    created() {
-     this.init()
-
+    deactivated() {
+      window.history.go(0)
     },
     components:{
       Slider
@@ -104,18 +100,61 @@
       turnPage:()=>$('#turn-hgz'),
     },
     mounted() {
-      this.data && this.page.length > 1 && $('#turn-hgz').turn({
-        width: this.turnPage.width(),
-        height: this.turnPage.height(),
-        autoCenter: false,
-        display: 'single',
-        gradients: true
-      })
-    },
-    activated() {
-
+      
     },
     methods:{
+      initPage(detail) {
+        this.data = detail
+        this.screenHeight = window.innerHeight
+        this.screemWidth = window.innerWidth
+        const col = Math.floor((this.screemWidth - 40) / this.txtWidth)
+        const row = Math.floor(this.screenHeight / this.lineHeight)
+        let data=this.data;
+        data="    "+data;
+        data=data.replace(/↵/g,`↵</div><div>    `);
+        let page=[];
+        let start=0;
+        for(let i=0;i<row;i++){
+          let w=0;
+          let num=0;
+          for(let j=0;j<=col;j++){
+            console.log(/↵/.test(data[start + num]));
+            if(/↵/.test(data[start+num])){
+              let str=data.slice(start,start+num);
+              console.log(str);
+              start+=num+1;
+              page.push(str);
+              break;
+            }
+            w+=this.txtWidth;
+            num++;
+            if(w>=this.screemWidth - 40){
+              let str=data.slice(start,start+j);
+              start+=num;
+              page.push(str);
+              break;
+            }
+          }
+        }
+        this.page=page.join("").replace(/ /g,`&nbsp`);
+        (async () => {
+          await this.init()
+          this.$nextTick(() => {
+            this. initTurn()
+          })
+        })()
+      },
+      initTurn() {
+        console.log(this.data, 'turn data')
+        console.log(this.page, 'turn page')
+        this.data && this.page.length > 1 && $('#turn-hgz').turn({
+          width: this.turnPage.width(),
+          height: this.turnPage.height(),
+          autoCenter: false,
+          display: 'single',
+          gradients: true
+        })
+      },
      init(){
        this.pages()
        this.initBackground()
