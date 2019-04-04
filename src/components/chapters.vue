@@ -13,7 +13,7 @@
   	},
   	methods: {
   	  getChapter(item) {
-	    window.sessionStorage.setItem('ready-link', item.link)
+	    window.localStorage.setItem('ready-link', item.link)
 	    this.$router.push({path: `/ready`})
 	  }
   	}
