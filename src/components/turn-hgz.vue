@@ -36,6 +36,7 @@
       const col = Math.floor((this.screemWidth - 40) / this.txtWidth)
       const row = Math.floor(this.screenHeight / this.lineHeight)
       let data=this.data;
+      console.log(data, 'data')
       data="    "+data;
       data=data.replace(/↵/g,`↵</div><div>    `);
       let page=[];
