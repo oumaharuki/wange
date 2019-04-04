@@ -1,6 +1,6 @@
 <template>
   <div class="ready-box">
-    <turn-hgz ref='turn' :data=readyDes.body :txtWidth=txtWidth :lineHeight=lineHeight></turn-hgz>
+    <turn-hgz ref='turn' v-if="content!=''" :content=content :txtWidth=txtWidth :lineHeight=lineHeight></turn-hgz>
   </div>
 </template>
 <script>
@@ -13,7 +13,8 @@ export default {
     return {
       txtWidth: 14,
       lineHeight: 21,
-      readyDes: {}
+      readyDes: {},
+      content:""
     }
   },
   components: {
@@ -29,8 +30,8 @@ export default {
     }
     cats(chapterApi + link).then(chapterDes => {
       if (chapterDes.ok) {
-        this.readyDes.body = chapterDes.chapter.body
-        this.$refs['turn'].initPage(this.readyDes.body)
+        this.content = chapterDes.chapter.body
+        // this.$refs['turn'].initPage(this.readyDes.body)
       }
     })
   },

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import turn from "components/turn"
+import turn from "components/turn-hgz"
     export default {
         name: "bookRead",
       components:{

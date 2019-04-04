@@ -1,8 +1,8 @@
 <template>
   <div style="">
-    <div id='turn-hgz' :style="{'font-size': txtWidth + 'px', 'line-height': lineHeight + 'px',}"
+    <div id='turn-hgz' :style="{'font-size': txtWidth + 'px', 'line-height': lineHeight + 'px',height: '100%'}"
     >
-      <div class="content" v-for="item in page" style="padding: 0" :style="{background: 'url('+img+')'}">
+      <div class="content" v-for="item in page" style="padding: 0;height: 100%" :style="{background: 'url('+img+')'}">
         <div style="line-height: 21px;padding: 30px 20px;height: 100%" v-html="item">
 
         </div>
@@ -77,7 +77,6 @@
         img:img1,
         imgs:imgs,
         setFontFlag:false,
-        data: ''
       }
     },
     props: {
@@ -88,6 +87,9 @@
       lineHeight: {
         type: Number,
         default: 18
+      },
+      content:{
+        default:""
       }
     },
     deactivated() {
@@ -99,55 +101,27 @@
     computed:{
       turnPage:()=>$('#turn-hgz'),
     },
+    created(){
+      this.init()
+    },
     mounted() {
-      
+      // this.init()
+      this.initTurn()
     },
     methods:{
       initPage(detail) {
-        this.data = detail
-        this.screenHeight = window.innerHeight
-        this.screemWidth = window.innerWidth
-        const col = Math.floor((this.screemWidth - 40) / this.txtWidth)
-        const row = Math.floor(this.screenHeight / this.lineHeight)
-        let data=this.data;
-        data="    "+data;
-        data=data.replace(/↵/g,`↵</div><div>    `);
-        let page=[];
-        let start=0;
-        for(let i=0;i<row;i++){
-          let w=0;
-          let num=0;
-          for(let j=0;j<=col;j++){
-            console.log(/↵/.test(data[start + num]));
-            if(/↵/.test(data[start+num])){
-              let str=data.slice(start,start+num);
-              console.log(str);
-              start+=num+1;
-              page.push(str);
-              break;
-            }
-            w+=this.txtWidth;
-            num++;
-            if(w>=this.screemWidth - 40){
-              let str=data.slice(start,start+j);
-              start+=num;
-              page.push(str);
-              break;
-            }
-          }
-        }
-        this.page=page.join("").replace(/ /g,`&nbsp`);
+        // this.data = detail
         (async () => {
           await this.init()
           this.$nextTick(() => {
-            this. initTurn()
+            this.initTurn()
           })
         })()
       },
       initTurn() {
-        console.log(this.data, 'turn data')
-        console.log(this.page, 'turn page')
-        this.data && this.page.length > 1 && $('#turn-hgz').turn({
+        // console.log(this.data, 'turn data')
+        // console.log(this.page, 'turn page')
+         $('#turn-hgz').turn({
           width: this.turnPage.width(),
           height: this.turnPage.height(),
           autoCenter: false,
@@ -170,19 +144,21 @@
         this.screemWidth =document.body.scrollWidth;
         const col = Math.floor((this.screemWidth - 40) / this.txtWidth)
         const row = Math.floor((this.screenHeight-60)/ this.lineHeight)
-        let data=this.data;
+        let data=this.content;
         let page=this.makePageAry(data,col);
         let pageNum=Math.ceil(page.length/row);
         let pageStrs=[];
         for(let i=1;i<=pageNum;i++){
           pageStrs.push(page.slice((i-1)*row,i*row).join(""))
         }
+        console.log(pageStrs);
         this.page=pageStrs;
       },
       makePageAry(data,col){
         data=data.replace(/ /g,"");
         data="  "+data;
-        data=data.replace(/↵/g,`↵  `);
+        data=data.replace(/\n/g,`\n  `);
+        console.log(/\n/.test(data));
         let page=[];
         let start=0;
         for(let i=0;;i++){
@@ -192,7 +168,7 @@
             break;
           }
           for(let j=0;j<=col;j++){
-            if(/↵/.test(data[start+num])){
+            if(/\n/.test(data[start+num])){
               let str=data.slice(start,start+num)+`</br>`;
               start+=num+1;
               page.push(str);
