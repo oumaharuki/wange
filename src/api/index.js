@@ -25,3 +25,4 @@ export const bookDes = api + '/book'
 export const atoc = api + '/mix-atoc'
 // 获取小说章节内容
 export const chapterApi = chapterup + '/chapter/'
+export const searchApi=api +"/book/fuzzy-search"

@@ -73,6 +73,11 @@ export default new Router({
       path: '/bookRead',
       name: 'bookRead',
       component: bookRead
-    }
+    },
+    {
+      path: '/search',
+      name: 'readyDes',
+      component: () => import('page/search')
+    },
   ]
 })

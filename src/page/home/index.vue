@@ -1,6 +1,9 @@
 <template>
     <div class="home-page">
-      <div class="home-head" :style="{background: bg}">head</div>
+      <div class="home-head" :style="{background: bg}"><div></div>
+        <div style="padding: 0 20px;color: #fff" @click="search"><Icon type="ios-search" size="24"/>
+        </div>
+      </div>
       <div class="home-main">
         <router-view/>
       </div>
@@ -28,6 +31,11 @@ import HomeBottom from './components/homeBottom'
       },
       components:{
         HomeBottom
+      },
+      methods:{
+        search(){
+          this.$router.push("/search")
+        }
       }
     }
 </script>
@@ -40,6 +48,11 @@ import HomeBottom from './components/homeBottom'
   flex-direction column
   .home-head
     flex  0 0  px2rem(150)
+    display flex
+    flex-direction row
+    justify-content space-between
+    align-content center
+    line-height px2rem(150)
   .home-main
     display  flex
     flex  1

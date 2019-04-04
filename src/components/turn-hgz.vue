@@ -179,18 +179,38 @@
         const wleft=wcenter/3;
         const wright=wcenter+wcenter/3;
         if(e.clientX<=wleft){
+          if(this.setFontFlag||this.menuFlag){
+            this.setFontFlag=false;
+            this.menuFlag=false;
+            return
+          }
           this.pagePre();
         }
         if(e.clientX>=wright){
+          if(this.setFontFlag||this.menuFlag){
+            this.setFontFlag=false;
+            this.menuFlag=false;
+            return
+          }
           this.pageNext();
         }
         const ycenter=this.screenHeight/2;
         const ytop=ycenter/3;
         const ybottom=ycenter+ycenter/3;
         if(e.clientY<=ytop&&e.clientX>wleft&&e.clientX<wright){
+          if(this.setFontFlag||this.menuFlag){
+            this.setFontFlag=false;
+            this.menuFlag=false;
+            return
+          }
           this.pagePre();
         }
         if(e.clientY>=ybottom&&e.clientX>wleft&&e.clientX<wright){
+          if(this.setFontFlag||this.menuFlag){
+            this.setFontFlag=false;
+            this.menuFlag=false;
+            return
+          }
           this.pageNext();
         }
         if(e.clientY<ybottom&&e.clientY>ytop&&e.clientX>wleft&&e.clientX<wright){

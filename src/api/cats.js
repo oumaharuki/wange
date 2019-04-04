@@ -14,3 +14,16 @@ export const cats=(url)=>{
     })
   })
 }
+/*
+* 有参get
+* */
+export const get=(url,data)=>{
+  return new Promise((resolve,reject)=>{
+    axios.get(url,{params:data}).then((res)=>{
+      res.status==200&&res.statusText==OK?resolve(res.data):
+        reject(new Error("cats get erro"))
+    }).catch(err => {
+      console.log(err, 'err')
+    })
+  })
+}

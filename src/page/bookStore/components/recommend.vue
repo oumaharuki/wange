@@ -75,8 +75,13 @@
           let limit=this.hotRecommendListLimit;
           limit.start=limit.start+8;
           limit.end=limit.end+8;
+          let recommendList=this.recommend.slice(limit.start,limit.end)
+          if(recommendList.length===0){
+            return
+          }
+          this.recommendList=recommendList;
           this.sethotRecommendListLimit({start:limit.start,end:limit.end})
-          this.recommendList=this.recommend.slice(limit.start,limit.end)
+
         },
       },
       watch:{
@@ -111,9 +116,7 @@
     flex-direction row
     flex-wrap wrap
     margin-top px2rem(60)
+    justify-content space-around
     .recommend-book
-      width px2rem(200)
-      margin-right px2rem(70)
-      &.no-margin
-        margin-right 0
+      width px2rem(230)
 </style>
