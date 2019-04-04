@@ -44,6 +44,7 @@ import Top from "components/top-return";
 import { bookDes, statics, atoc, chapterApi } from "api";
 import { cats } from "api/cats";
 import Chapters from "components/chapters"
+import { openDB, addData } from 'api/indexedDB.js'
 export default {
   name: "bookDes",
   components: {
@@ -58,7 +59,8 @@ export default {
       total: 0,
       chapter: [],
       page: 15,
-      current: 1
+      current: 1,
+      db: null
     };
   },
   activated() {
@@ -88,9 +90,37 @@ export default {
       this.getChapters(start * this.page, end)
     },
     beginReady() {
-
     },
     addBookCase() {
+      let indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.msIndexedDB
+
+      if (!indexedDB) {
+        window.alert('您的设备不支持该功能')
+        return
+      }
+
+      openDB(2.0).then((db) => {
+        this.db = db
+        addData({
+          db: this.db,
+          table: 'bookcase',
+          tableSon: { 'id': this.des._id, cover: this.des.cover, title: this.des.title },
+          keyPath: 'id'
+        })
+        
+        // this.chapters.map(item => {
+        //   this.getContent(item.link).then(res => {
+        //     addData({
+        //       db: this.db,
+        //       table: 'bookcontent',
+        //       tableSon: { link: item.link, bookId: this.des._id, title: item.title, content: res.body },
+        //       keyPath: 'link'
+        //     })
+        //   })
+        // })
+      })
+    },
+    addBookCases() {
       if (window.openDatabase) {
         let db = window.openDatabase('zssq', '1.0', '书架', null)
         db.transaction((tx) => {

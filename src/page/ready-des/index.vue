@@ -33,9 +33,6 @@ export default {
         this.$refs['turn'].initPage(this.readyDes.body)
       }
     })
-  },
-  deactivated() {
-    // window.sessionStorage.removeItem('ready-link')
   }
 }
 </script>
