@@ -8,8 +8,8 @@
         <Button text="搜索"
          @click="search" style="margin-left: 10px"></Button>
       </div>
-      <book-detail class='search-data' v-for='item in searchData' :des='item' :key='item.wordCount'>
-        <p class="search-item-bottom"></p>
+      <book-detail class='search-data' v-for='(item, index) in searchData' :des='item' :key='item.wordCount'>
+        <p class="search-item-bottom" :style="{height: index !== searchData.length - 1 ? '.8rem' : '0px'}"></p>
       </book-detail>
     </div>
 </template>
@@ -37,7 +37,6 @@
       },
       methods:{
         search(){
-          console.log(this.searchStr);
           get(searchApi,{query:this.searchStr}).then(res=>{
             this.searchData = res.books
           })

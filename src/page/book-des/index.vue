@@ -5,13 +5,13 @@
     </top>
     <div class="scroll">
       <Scroll class="scroll-ui">
-        <book-detail :des=des :chapters=chapters></book-detail>
-        <Divider dashed />
-        <div class="chapters">
+        <book-detail :des=des></book-detail>
+        <!-- <Divider dashed /> -->
+        <!-- <div class="chapters">
           <chapters :chapter=chapter></chapters>
           <Page :current.sync="current" :total="total" simple @on-change="changePage" :page-size="page" class="page-ui"/>
-          <!-- <Divider dashed /> -->
-        </div>
+          <Divider dashed />
+        </div> -->
       </Scroll>
     </div>
   </div>
@@ -49,24 +49,17 @@ export default {
       cats(param).then(des => {
         this.des = des;
       });
-      cats(`${atoc}/${this.$route.params.id}?view=chapters`).then(res => {
-        this.chapters = res.mixToc.chapters
-        this.total = this.chapters.length
-        console.log(this.total, 'tt')
-        const end = this.page < this.total ? this.page : this.total
-        this.getChapters(0, end)
-      })
     },
-    getChapters(start, end) {
-      let index = 0
-      this.chapter = []
-      Array.from({length: (end - start)}).map(() => { this.chapter.push(this.chapters[start + index++]) })
-    },
-    changePage() {
-      const start = this.current - 1
-      const end = (start + 1) * this.page > this.chapters.length ? this.chapters.length : (start + 1) * this.page
-      this.getChapters(start * this.page, end)
-    }
+    // getChapters(start, end) {
+    //   let index = 0
+    //   this.chapter = []
+    //   Array.from({length: (end - start)}).map(() => { this.chapter.push(this.chapters[start + index++]) })
+    // },
+    // changePage() {
+    //   const start = this.current - 1
+    //   const end = (start + 1) * this.page > this.chapters.length ? this.chapters.length : (start + 1) * this.page
+    //   this.getChapters(start * this.page, end)
+    // }
   }
 };
 </script>

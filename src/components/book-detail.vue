@@ -37,17 +37,14 @@ export default {
   name: 'book-detail',
   data() {
   	return {
-  	  statics
+  	  statics,
+  	  chapters: []
   	}
   },
   props: {
   	des:{
   	  type: Object,
   	  default: {}
-  	},
-  	chapters: {
-  	  type: Array,
-  	  default: []
   	}
   },
   methods: {
@@ -55,6 +52,14 @@ export default {
 
   	},
   	addBookCase() {
+  	  this.getChapters().then(() => {
+  	  	this.dbHandle()
+  	  }, () => {
+  	  	this.$Message.error('Data acquisition failed!')
+  	  })
+      
+    },
+    dbHandle() {    
       let indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.msIndexedDB
 
       if (!indexedDB) {
@@ -85,6 +90,18 @@ export default {
             })
           })
         })
+      })
+    },
+    getChapters() {
+      return new Promise((resolve, reject) => {
+      	cats(`${atoc}/${this.des._id}?view=chapters`).then(res => {
+	      	if (res.ok) {
+	      	  this.chapters = res.mixToc.chapters
+	      	  resolve()
+	      	} else {
+	      	  reject()
+	      	}
+	      })
       })
     },
     getContent (link) {
