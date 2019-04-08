@@ -1,8 +1,9 @@
 <template>
     <div class="store-head">
-      <head-banner class="store-banner"></head-banner>
-      <recommend :hotRecommend="male|hotRecommend" v-if="male.length>0"></recommend>
-      书城
+      <Scroll class="scroll-ui">
+        <head-banner class="store-banner"></head-banner>
+        <recommend :hotRecommend="male|hotRecommend" v-if="male.length>0"></recommend>
+      </Scroll>
     </div>
 </template>
 
@@ -57,4 +58,16 @@
   .store-banner
     margin-bottom px2rem(60)
 
+.ivu-scroll-container {
+  height: 100% !important;
+}
+
+.scroll-ui {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+}
 </style>

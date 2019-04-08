@@ -1,8 +1,5 @@
 // 打开或者创建数据库
 export function openDB (version) {
-  /*
-  params: version、tableName、[{key, set}]
-  */
   console.log(version, 'version')
   return new Promise((resolve, reject) => {
   	let db
@@ -29,29 +26,33 @@ export function openDB (version) {
   	  }
 
   	  if (!db.objectStoreNames.contains('bookcase')) {
-  	  	let objectStore = db.createObjectStore('bookcase', {keyPath: 'id', unique: false})
+  	  	let objectStore = db.createObjectStore('bookcase', {keyPath: '_id', unique: false})
   	  }
-
   	  // resolve(db)
   	}
   })
 }
 
+// 关闭数据库
+export function closeDB (db) {
+  if (!db) {
+  	return
+  }
+  db.close()
+  console.log('数据库已关闭')
+}
+
 // 给指定表添加数据
 export function addData (params) {
   let {db, table, tableSon, keyPath} = params
-  console.log(params, 'params tableSon')
   if (!db) {
   	return
   }
   return new Promise((resolve, reject) => {
-  	console.log(db.transaction, 'transaction')
-  	console.log(table, 'table')
   	let transaction = db.transaction(table, 'readwrite')
   	let store = transaction.objectStore(table)
 
   	let addTableSon = store.add(tableSon)
-  	console.log('add')
   	addTableSon.onsuccess = () => {
   	  resolve()
   	}
@@ -113,8 +114,15 @@ export function getDataAll (db, table) {
   	let store = transaction.objectStore(table)
 
   	let dataRequest = store.openCursor()
+  	let data = []
   	dataRequest.onsuccess = (e) => {
-  	  resolve(e.target.result)
+  	  let result = e.target.result
+  	  if (result && result !== null) {
+  	  	data.push(result.value)
+  	  	result.continue()
+  	  } else {
+  	  	resolve(data)
+  	  }
   	}
 
   	dataRequest.onerror = (e) => {

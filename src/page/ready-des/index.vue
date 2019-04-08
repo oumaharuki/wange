@@ -1,23 +1,24 @@
 <template>
   <div class="ready-box">
-    <turn-hgz ref='turn' :data=readyDes.body :txtWidth=txtWidth :lineHeight=lineHeight></turn-hgz>
+    <turn ref='turn' v-if="content!=''" :content=content :txtWidth=txtWidth :lineHeight=lineHeight></turn>
   </div>
 </template>
 <script>
 import { chapterApi } from "api";
 import { cats } from "api/cats";
-import TurnHgz from 'components/turn-hgz'
+import Turn from 'components/turn'
 export default {
   name: 'readyDes',
   data() {
     return {
       txtWidth: 14,
       lineHeight: 21,
-      readyDes: {}
+      readyDes: {},
+      content:""
     }
   },
   components: {
-    TurnHgz
+    Turn
   },
   mounted() {
     // this.txtWidth = 14
@@ -29,8 +30,8 @@ export default {
     }
     cats(chapterApi + link).then(chapterDes => {
       if (chapterDes.ok) {
-        this.readyDes.body = chapterDes.chapter.body
-        this.$refs['turn'].initPage(this.readyDes.body)
+        this.content = chapterDes.chapter.body
+        // this.$refs['turn'].initPage(this.readyDes.body)
       }
     })
   }

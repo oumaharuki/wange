@@ -5,32 +5,9 @@
     </top>
     <div class="scroll">
       <Scroll class="scroll-ui">
-        <div class="book-des">
-          <div class="des">
-            <img :src="statics + des.cover" alt>
-            <div>
-              <p class="title">{{des.title}}</p>
-              <p>
-                <Icon type="md-contact"/>
-                {{des.author}}
-              </p>
-              <p>
-                {{des.rating && des.rating.score.toFixed(2)}}分</p>
-              <p>{{des.minorCateV2}}</p>
-            </div>
-          </div>
-          <div class="btn">
-            <p>
-              <Button type="primary" @click='beginReady'>开始阅读</Button>
-            </p>
-            <p>
-              <Button @click='addBookCase'>加入书架</Button>
-            </p>
-          </div>
-          <p>{{des.longIntro}}</p>
-        </div>
+        <book-detail :des=des :chapters=chapters></book-detail>
+        <Divider dashed />
         <div class="chapters">
-          <Divider dashed />
           <chapters :chapter=chapter></chapters>
           <Page :current.sync="current" :total="total" simple @on-change="changePage" :page-size="page" class="page-ui"/>
           <!-- <Divider dashed /> -->
@@ -41,19 +18,19 @@
 </template>
 <script>
 import Top from "components/top-return";
-import { bookDes, statics, atoc, chapterApi } from "api";
+import { bookDes, atoc, chapterApi } from "api";
 import { cats } from "api/cats";
 import Chapters from "components/chapters"
-import { openDB, addData } from 'api/indexedDB.js'
+import BookDetail from 'components/book-detail'
 export default {
   name: "bookDes",
   components: {
     Top,
-    Chapters
+    Chapters,
+    BookDetail
   },
   data() {
     return {
-      statics: statics,
       des: {},
       chapters: [],
       total: 0,
@@ -75,6 +52,7 @@ export default {
       cats(`${atoc}/${this.$route.params.id}?view=chapters`).then(res => {
         this.chapters = res.mixToc.chapters
         this.total = this.chapters.length
+        console.log(this.total, 'tt')
         const end = this.page < this.total ? this.page : this.total
         this.getChapters(0, end)
       })
@@ -88,53 +66,6 @@ export default {
       const start = this.current - 1
       const end = (start + 1) * this.page > this.chapters.length ? this.chapters.length : (start + 1) * this.page
       this.getChapters(start * this.page, end)
-    },
-    beginReady() {
-    },
-    addBookCase() {
-      let indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.msIndexedDB
-
-      if (!indexedDB) {
-        window.alert('您的设备不支持该功能')
-        return
-      }
-
-      openDB(2.0).then((db) => {
-        this.db = db
-        addData({
-          db: this.db,
-          table: 'bookcase',
-          tableSon: { 'id': this.des._id, cover: this.des.cover, title: this.des.title },
-          keyPath: 'id'
-        })
-        
-        // this.chapters.map(item => {
-        //   this.getContent(item.link).then(res => {
-        //     addData({
-        //       db: this.db,
-        //       table: 'bookcontent',
-        //       tableSon: { link: item.link, bookId: this.des._id, title: item.title, content: res.body },
-        //       keyPath: 'link'
-        //     })
-        //   })
-        // })
-      })
-    },
-    addBookCases() {
-    },
-    getContent (link) {
-      return new Promise((resolve, reject) => {
-        if (/(\.txt)$/.test(link)) {
-          link = link.replace(/http:\//, 'http:%2F').replace(/\?/, '%3F')
-        }
-        cats(chapterApi + link).then(chapterDes => {
-          if (chapterDes.ok) {
-            resolve(chapterDes.chapter)
-          } else {
-            reject()
-          }
-        })
-      })
     }
   }
 };
@@ -167,45 +98,6 @@ export default {
   bottom: 0;
 }
 
-.book-des {
-  .des {
-    position: relative;
-    padding: 0 0.5rem;
-
-    img {
-      width: 4rem;
-    }
-
-    div {
-      position: absolute;
-      top: 0;
-      left: 5rem;
-      right: 0.5rem;
-      bottom: 0;
-      p{
-        margin .2rem 0;
-      }
-    }
-    .title{
-      font-size 1rem;
-      margin 0;
-    }
-  }
-
-  .btn {
-    text-align: center;
-    display: flex;
-
-    p {
-      flex: 1;
-    }
-  }
-
-  > p {
-    // text-indent: 1.4rem;
-    padding: 0.5rem;
-  }
-}
 
 .page-ui{
   input{
@@ -220,4 +112,5 @@ export default {
   text-align: center;
   border-radius: 2px;
 }
+
 </style>
