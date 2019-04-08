@@ -5,6 +5,7 @@
         	<book-item v-for="(item, index) in bookcase" :key="index"
                    :data="item" class="recommend-book" :class="(index+1)%4==0?'no-margin':''">
         	</book-item>
+        	<p v-if='bookcase.length === 0' class="empty">书架空空如也~</p>
         </div>
       </Scroll>
     </div>
@@ -64,5 +65,9 @@ export default {
   right: .8rem;
   bottom: 0;
   z-index: 1;
+}
+.empty{
+  color: #99989b;
+  text-align: center;
 }
 </style>

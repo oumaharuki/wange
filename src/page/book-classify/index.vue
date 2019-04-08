@@ -58,7 +58,7 @@ export default {
   },
   methods: {
     getBookList(param) {
-      this.$router.push({path: `/bookClassifyList/${param.gender}/${param.item.name}`})
+      this.$router.push({path: `/book-classify-list/${param.gender}/${param.item.name}`})
     }
   }
 };
