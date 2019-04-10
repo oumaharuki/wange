@@ -19,7 +19,7 @@
       methods:{
         routerPush(id){
           console.log(id);
-          this.$router.push("/bookDes/"+id)
+          this.$router.push("/book-des/"+id)
         }
       }
     }

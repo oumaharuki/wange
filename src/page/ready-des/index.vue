@@ -1,12 +1,12 @@
 <template>
   <div class="ready-box">
-    <turn-hgz ref='turn' v-if="content!=''" :content=content :txtWidth=txtWidth :lineHeight=lineHeight></turn-hgz>
+    <turn ref='turn' v-if="content!=''" :content=content :txtWidth=txtWidth :lineHeight=lineHeight></turn>
   </div>
 </template>
 <script>
 import { chapterApi } from "api";
 import { cats } from "api/cats";
-import TurnHgz from 'components/turn-hgz'
+import Turn from 'components/turn'
 export default {
   name: 'readyDes',
   data() {
@@ -18,7 +18,7 @@ export default {
     }
   },
   components: {
-    TurnHgz
+    Turn
   },
   mounted() {
     // this.txtWidth = 14
@@ -34,9 +34,6 @@ export default {
         // this.$refs['turn'].initPage(this.readyDes.body)
       }
     })
-  },
-  deactivated() {
-    // window.sessionStorage.removeItem('ready-link')
   }
 }
 </script>

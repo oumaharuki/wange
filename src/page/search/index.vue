@@ -8,6 +8,9 @@
         <Button text="搜索"
          @click="search" style="margin-left: 10px"></Button>
       </div>
+      <book-detail class='search-data' v-for='(item, index) in searchData' :des='item' :key='item.wordCount'>
+        <p class="search-item-bottom" :style="{height: index !== searchData.length - 1 ? '.8rem' : '0px'}"></p>
+      </book-detail>
     </div>
 </template>
 
@@ -15,6 +18,7 @@
   import Top from "components/top-return";
   import Input from "components/input";
   import Button from "components/button";
+  import BookDetail from 'components/book-detail'
   import { searchApi} from "api";
   import { get } from "api/cats";
     export default {
@@ -22,18 +26,19 @@
       components: {
         Top,
         Input,
-        Button
+        Button,
+        BookDetail
       },
       data(){
           return {
-            searchStr:""
+            searchStr:"",
+            searchData: []
           }
       },
       methods:{
         search(){
-          console.log(this.searchStr);
           get(searchApi,{query:this.searchStr}).then(res=>{
-            console.log(res);
+            this.searchData = res.books
           })
         },
         onChange(){
@@ -49,4 +54,10 @@
   flex-direction row
   justify-content space-around
   padding 20px
+
+.search-item-bottom {
+  margin: 24px 0;
+  height: .8rem;
+  background: #f1f2f7;
+}
 </style>

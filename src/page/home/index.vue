@@ -53,10 +53,13 @@ import HomeBottom from './components/homeBottom'
     justify-content space-between
     align-content center
     line-height px2rem(150)
+    z-index 1
   .home-main
     display  flex
     flex  1
     flex-direction column
+    position relative
   .home-bottom
     flex  0 0  px2rem(150)
+    z-index 1
 </style>

@@ -1,81 +1,402 @@
 <template>
-    <div class="turn-box" id="turn-box">
-      <div v-if="num.length>0" v-for="(item ,index) in num" :style="{ padding:'30px 20px',left:(index+1)*(-width)}" class="turn-box-div">
-        <div v-html="text" ></div>
+  <div style="">
+    <div id='turn-hgz' :style="{'font-size': txtWidth + 'px', 'line-height': lineHeight + 'px',height: '100%'}"
+    >
+      <div class="content" v-for="item in page" style="padding: 0;height: 100%" :style="{background: 'url('+img+')'}">
+        <div style="line-height: 21px;padding: 30px 20px;height: 100%" v-html="item">
+
+        </div>
       </div>
     </div>
-</template>
+    <div class="touchPage" @click="pageTouch">
 
+    </div>
+    <transition name="menu-top">
+    <div class="menu-top menu" v-if="menuFlag">
+
+
+    </div>
+    </transition>
+    <transition name="menu-bottom">
+    <div class="menu-bottom menu" v-if="menuFlag">
+        <div>
+          目录
+        </div>
+      <div>
+          进度
+      </div>
+      <div @click="setClick">
+          设置
+        </div>
+      <div>
+        缓存
+      </div>
+      <div>
+        夜间
+      </div>
+    </div>
+    </transition>
+    <transition name="set-font">
+    <div class="set-font menu" v-if="setFontFlag">
+      <h1>字体大小</h1>
+      <div class="font-slider"><span style="width: 50px;font-size: 16px" @click="fontSliderMinus">A-</span>
+        <Slider v-model="fontSlider" :step="1" :max="40" :min="12" style="flex: 1;" @on-change="fontSliderChange"></Slider>
+        <span style="width: 50px;font-size: 16px" @click="fontSliderAdd">A+</span></div>
+      <div class="set-img">
+        <span v-for="item in imgs" :key="item.id" style="position: relative" @click="backgroundClick(item)">
+          <img :src="item.url" alt="" :class="{'active':item.url==img}">
+          <Icon type="ios-checkmark" :class="['checkmark',{'active':item.url==img}]"/>
+        </span>
+      </div>
+    </div>
+    </transition>
+  </div>
+</template>
 <script>
-  const text=`“咩——咩——咩——”一声声学羊叫的声音在寂静的山岭之中回荡着。↵李七夜爬上了山岗，夜风又急又冷，但是，此时他焦急得一身是汗。十三岁的他，手脚并用地爬上山峦，夜色显得特别的孤怜，让人毛骨悚然。↵虽然夜色显得可怕，但是，李七夜心里面却心急若焚。↵李七夜，他出身于佃农人家，父母皆是贫苦之人，他七岁开始给人放羊。↵李七夜，他家里姓李，因为出生时他哭了七天七夜，被取名为李七夜。↵今天，李七夜如平常时一样放羊，但是，傍晚赶羊回去的时候，发现少了一头羊，这可把他急坏了，他急忙回到山岗寻找，但是，他翻遍了整个山岗，都没有找到这头羊。↵想到张大户地主的凶狠，丢了一头羊，李七夜心急如焚，惶惶不安。↵现在整个山岗都找遍了，都没有那头羊的影子，在这个时候，李七夜想到了一个地方，只有一个地方没有去寻找——仙魔洞！↵抬头一望前面山谷的夜色，宛如是一头洪荒凶兽一样，张开大嘴随时都择人而噬，耳边隐隐听到狼哭鬼叫的声音，远眺仙魔洞迷离的夜色，李七夜不由打了一个寒颤。↵仙魔洞，在当地出了凶名的地方，传说里面住着一只恶魔，任何人进去，都会被吃掉，进去之后，从来没有人能活着出来。↵但是，此时，张大户那啪啪响的皮鞭声却在李七夜耳边回荡，丢了一头羊，张大户一定会把他抽得皮绽肉烂！↵想到这里，李七夜不由一咬牙，往前面如凶兽巨嘴一般的仙魔洞走去，眨眼之间，他的身影消失在夜色之中。↵“啊——”在凄色的夜晚，仙魔洞中响起一声惨叫，李七夜惊骇的声音响起：“你，你，你要干什么——啊——”接着，惨叫声嘎然而止。↵“好，好，好，本座永生不死的阴鸦终于炼成，只缺魂魄，今日正好借你魂魄一用！”也不知道多久，仙魔洞响起了一个幽深阴沉的声音。↵“啪——啪——啪——”没有一会儿，一阵急促的拍翅声音响起，一只乌鸦一般的怪鸟飞出了仙魔洞。↵“飞吧，飞吧，本座要借你的魂魄记住葬地，飞越遗土，只要九界还在，本座一定要找到！”仙魔洞中，幽深阴沉的声音回荡着。↵从此之后，天地之间，有着一只阴鸦遨翔，入葬地，进仙城，跨凶域……身不由己，飞越九界，经万般磨难，千百万年而不死！↵时光流逝，时代变迁，一个一个无敌的人物崛起，一位又一位巨头陨落。↵慢慢地，不知道从什么时候·开始，一时神秘的乌鸦开始出现，一只摆脱了禁锢的神秘乌鸦，开始寻找能主宰自己命运的道路。↵从药神，到飞仙帝，再到血玺仙帝，再到明仁仙帝，又到吞日仙帝，再到冰羽仙帝……最后到黑龙王。↵这一个一个无敌的巨头背后，都隐隐有一只乌鸦的影子，一只寻找主宰自己命运的乌鸦的影子。↵一代代无敌巨头崛起，又一代代神明殒落远去，但是，跨越千万年之久，那只乌鸦，依然隐隐出现在时间长河之中。↵一只不甘命运被左右的乌鸦，对抗着天地最可怕的存在，左右着千万年中的一个又一个大时代的变迁！`
-  // import $ from 'jquery';
-  import 'assets/js/turn.min';
-    export default {
-        name: "turn",
-      data(){
-        return {
-          text:text,
-          num:[],
-          width:0
-        }
+  import 'assets/js/turn.min'
+  import {Slider} from "iview"
+  import img1 from "../assets/img/ready1.jpg";
+  import img2 from "../assets/img/ready2.jpg"
+  import img3 from "../assets/img/ready3.jpg"
+  import img4 from "../assets/img/ready4.jpg"
+  const imgs=[
+    {id:1,url:img1},
+    {id:2,url:img2},
+    {id:3,url:img3},
+    {id:4,url:img4},
+  ]
+  export default {
+    name: 'turn-hgz',
+    data() {
+      return {
+        screenHeight: 0,
+        screemWidth: 0,
+        page: [],
+        menuFlag: false,//菜单flag
+        fontSlider:this.txtWidth,
+        img:img1,
+        imgs:imgs,
+        setFontFlag:false,
+      }
+    },
+    props: {
+      txtWidth: {
+        type: Number,
+        default: 12
       },
-      mounted(){
-        $('#turn-box').turn({
-          width: $('#turn-box').width(),
-          height: $('#turn-box').height(),
+      lineHeight: {
+        type: Number,
+        default: 18
+      },
+      content:{
+        default:""
+      }
+    },
+    deactivated() {
+      window.history.go(0)
+    },
+    components:{
+      Slider
+    },
+    computed:{
+      turnPage:()=>$('#turn-hgz'),
+    },
+    created(){
+      this.init()
+    },
+    mounted() {
+      // this.init()
+      this.initTurn()
+    },
+    methods:{
+      initPage(detail) {
+        // this.data = detail
+        (async () => {
+          await this.init()
+          this.$nextTick(() => {
+            this.initTurn()
+          })
+        })()
+      },
+      initTurn() {
+        // console.log(this.data, 'turn data')
+        // console.log(this.page, 'turn page')
+         $('#turn-hgz').turn({
+          width: this.turnPage.width(),
+          height: this.turnPage.height(),
           autoCenter: false,
           display: 'single',
-          gradients: true,
-          // ... plus any extra option you need
-        });
-        // console.log($('#turn-box div').height());
-        // console.log(Math.floor($('#text').height()/$(document).height()));
-        // this.num=new Array(Math.floor($('#text').height()/$(document).height()));
-
-
+          gradients: true
+        })
       },
-      created(){
-
-        // this.text="<div>"+this.text+"<div/>";
-        this.text=this.text.replace(/↵/g,`<div/><div>`);
-        let node=$("div");
-        node.html(this.text)
-        node.css({columns:300,columnGap:30,fontSize:20,lineHeight:"30px",padding: "30px 20px"})
-        $('#turn-box').append(node)
-        console.log(window.innerHeight);
-        let lenth=Math.floor(node.height()/window.innerHeight);
-        if(lenth>1){
-          lenth-=1;
+     init(){
+       this.pages()
+       this.initBackground()
+     },
+      initBackground(){
+       let url=localStorage.getItem("readBackground");
+       if(url){
+        this.img=url;
+       }
+      },
+      pages(){
+        this.screenHeight = document.body.scrollHeight;
+        this.screemWidth =document.body.scrollWidth;
+        const col = Math.floor((this.screemWidth - 40) / this.txtWidth)
+        const row = Math.floor((this.screenHeight-60)/ this.lineHeight)
+        let data=this.content;
+        let page=this.makePageAry(data,col);
+        let pageNum=Math.ceil(page.length/row);
+        let pageStrs=[];
+        for(let i=1;i<=pageNum;i++){
+          pageStrs.push(page.slice((i-1)*row,i*row).join(""))
         }
-        this.num=new Array(lenth);
-        node.css("display","none")
-        console.log( this.num.length);
-        // $('#turn-box').remove(node)
-        console.log(node.height());
-        this.width=window.innerWidth;
-
+        console.log(pageStrs);
+        this.page=pageStrs;
       },
-      methods:{
-          init(){
-
+      makePageAry(data,col){
+        data=data.replace(/ /g,"");
+        data="  "+data;
+        data=data.replace(/\n/g,`\n  `);
+        console.log(/\n/.test(data));
+        let page=[];
+        let start=0;
+        for(let i=0;;i++){
+          let w=0;
+          let num=0;
+          if(start>=data.length){
+            break;
           }
+          for(let j=0;j<=col;j++){
+            if(/\n/.test(data[start+num])){
+              let str=data.slice(start,start+num)+`</br>`;
+              start+=num+1;
+              page.push(str);
+              break;
+            }
+            w+=this.txtWidth;
+            if(w<this.screemWidth - 40){
+              num++;
+            }else {
+              let str=data.slice(start,start+num);
+              start+=num;
+              page.push(str);
+              break;
+            }
+          }
+        }
+        return page.map(item=>{
+          return item.replace(/ /g,`&nbsp;&nbsp;`);
+        });
+      },
+      pageTouch(e){
+        const wcenter=this.screemWidth/2;
+        const wleft=wcenter/3;
+        const wright=wcenter+wcenter/3;
+        if(e.clientX<=wleft){
+          if(this.setFontFlag||this.menuFlag){
+            this.setFontFlag=false;
+            this.menuFlag=false;
+            return
+          }
+          this.pagePre();
+        }
+        if(e.clientX>=wright){
+          if(this.setFontFlag||this.menuFlag){
+            this.setFontFlag=false;
+            this.menuFlag=false;
+            return
+          }
+          this.pageNext();
+        }
+        const ycenter=this.screenHeight/2;
+        const ytop=ycenter/3;
+        const ybottom=ycenter+ycenter/3;
+        if(e.clientY<=ytop&&e.clientX>wleft&&e.clientX<wright){
+          if(this.setFontFlag||this.menuFlag){
+            this.setFontFlag=false;
+            this.menuFlag=false;
+            return
+          }
+          this.pagePre();
+        }
+        if(e.clientY>=ybottom&&e.clientX>wleft&&e.clientX<wright){
+          if(this.setFontFlag||this.menuFlag){
+            this.setFontFlag=false;
+            this.menuFlag=false;
+            return
+          }
+          this.pageNext();
+        }
+        if(e.clientY<ybottom&&e.clientY>ytop&&e.clientX>wleft&&e.clientX<wright){
+          if(this.setFontFlag){
+            this.setFontFlag=false;
+          }else {
+            this.menuFlag=!this.menuFlag;
+          }
+        }
+      },
+      pageNext(){
+        let curNum=this.turnPage.turn('page');
+        if(curNum==this.turnPage.turn('pages')){
+          console.log("已经是最后一页");
+        }
+        this.turnPage.turn('next');
+      },
+      pagePre(){
+        let curNum=this.turnPage.turn('page');
+        if(curNum==1){
+          console.log("已经是第一页");
+        }
+        this.turnPage.turn('previous');
+      },
+      fontSliderChange(data){
+        console.log(data);
+      },
+      fontSliderMinus(){
+       this.fontSlider--;
+      },
+      fontSliderAdd(){
+        this.fontSlider++;
+      },
+      backgroundClick(item){
+        localStorage.setItem("readBackground",item.url);
+        this.img=item.url;
+      },
+      setClick(){
+       this.setFontFlag=true;
       }
     }
+  }
 </script>
-
-<style scoped lang="stylus">
-.turn-box
+<style lang='stylus'>
+#turn-hgz
   width  100vw
-  height  100vh
-  font-size 16px
-  line-height 20px
+  height  100vh !important
   position relative
-  .turn-box-div
-    display inline
-    columns 300px
-    column-gap 30px
-    background #fff
-    font-size 20px
+  .content
+    padding 0 20px
+    br {
+      height 0px !important;
+    }
+.touchPage
+  position fixed
+  top 0
+  left 0
+  width 100%
+  height 100%
+  z-index 100
+.menu-top
+  top 0
+.menu
+  position fixed
+  left 0
+  width 100%
+  height 50px
+  background #000
+  z-index 101
+.menu-bottom
+  bottom 0
+  display flex
+  flex-direction row
+  justify-content space-between
+  align-items center
+  align-content center
+  color #fff
+  div
+    text-align center
+    flex 1
+.set-font
+  bottom 50px
+  height 200px
+  display flex
+  flex-direction column
+  justify-content space-around
+  h1
+    text-align center
+    font-size 18px
+    color #fff
     line-height 30px
-    text-indent 25px
+  .font-slider
+    display flex
+    flex-direction row
+    justify-content space-between
+    align-items center
+    span
+      text-align center
+  .set-img
+    display flex
+    flex-direction row
+    justify-content space-between
+    align-items center
+    padding 0 10px
+    img
+      width 90px
+      height 50px
+      border-radius 3px
+      &.active
+        border 1px solid red
+        box-sizing border-box
+    .checkmark
+      text-align center
+      color red
+      font-size 24px
+      position absolute
+      top 50%
+      left 50%
+      margin-left -12px
+      margin-top -12px
+      display none
+      &.active
+        display inline
+
+.menu-bottom-enter-active,.menu-top-enter-active,.set-font-enter-active {
+  transition: all .3s ease;
+}
+.menu-bottom-leave-active,.menu-top-leave-active {
+  transition: all .3s ease;
+}
+.set-font-leave-active {
+  transition: all .01s ease;
+}
+.menu-bottom-enter-to{
+    bottom 0;
+}
+.menu-bottom-enter {
+  bottom -50px;
+}
+.menu-bottom-leave{
+  bottom 0;
+}
+.menu-bottom-leave-to{
+  bottom -50px;
+}
+.menu-top-enter-to{
+  top 0;
+}
+.menu-top-enter {
+  top -50px;
+}
+.menu-top-leave{
+  top 0;
+}
+.menu-top-leave-to{
+  top -50px;
+}
+.set-font-enter-to{
+  /*bottom 50px;*/
+  opacity 1
+}
+.set-font-enter {
+  /*bottom 0;*/
+  opacity 0
+}
+.set-font-leave{
+  /*bottom 50px;*/
+  opacity 1
+}
+.set-font-leave-to{
+  /*bottom 0;*/
+  opacity 0
+}
 </style>

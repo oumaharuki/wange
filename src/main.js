@@ -3,7 +3,7 @@ import App from './App'
 import router from './router'
 import store from './store'
 // import iView from 'iview'
-import { Radio, Icon, RadioGroup, FormItem, Form, Scroll, Message, Button, BackTop, Page, Divider, Rate } from 'iview'
+import { Radio, Modal, Icon, RadioGroup, FormItem, Form, Scroll, Message, Button, BackTop, Page, Divider, Rate } from 'iview'
 import VueRouter from 'vue-router'
 import 'iview/dist/styles/iview.css'
 import 'assets/reset.styl'
@@ -23,6 +23,7 @@ Vue.component('Icon', Icon)
 Vue.component('Form', Form)
 Vue.component('FormItem', FormItem)
 Vue.component('Scroll', Scroll)
+Vue.component('Modal', Modal)
 // Vue.use(iView)
 
 /* eslint-disable no-new */
