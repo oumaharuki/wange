@@ -65,7 +65,7 @@ export default new Router({
       component: () => import('page/book-des')
     },
     {
-      path: '/ready',
+      path: '/ready/:id/:title',
       name: 'readyDes',
       component: () => import('page/ready-des')
     },
