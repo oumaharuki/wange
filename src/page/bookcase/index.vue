@@ -2,9 +2,10 @@
     <div class="bookcase-box">
       <Scroll class="scroll-ui">
         <div class="bookcase-list">
-        	<book-item v-for="(item, index) in bookcase" :key="index"
-                   :data="item" class="recommend-book" :class="(index+1)%4==0?'no-margin':''">
-        	</book-item>
+          <div v-for="item in bookcase" :key="item._id" @click='getReady(item)'>
+            <img :src= "statics + item.cover">
+            <p>{{item.title}}</p>
+          </div>
         	<p v-if='bookcase.length === 0' class="empty">书架空空如也~</p>
         </div>
       </Scroll>
@@ -13,7 +14,6 @@
 <script>
 import {statics} from "api"
 import {getDataAll, openDB, closeDB} from 'api/indexedDB'
-import BookItem from "components/bookItem"
 export default {
   name: 'bookcase',
   data() {
@@ -22,9 +22,6 @@ export default {
   	  statics
   	}
   },
-  components: {
-  	BookItem
-  },
   created() {
   	openDB(2.0).then(db => {
   	  getDataAll(db, 'bookcase').then(res => {
@@ -32,6 +29,11 @@ export default {
   	  	closeDB(db)
   	  })
   	})
+  },
+  methods: {
+    getReady(item) {
+      this.$router.push({path: `/ready/${item._id}/${item.title}`})
+    }
   }
 }
 </script>
@@ -50,13 +52,15 @@ export default {
   height: 100% !important;
   
 .bookcase-list
-  display flex
-  flex-direction row
-  flex-wrap wrap
-  margin-top px2rem(60)
-  justify-content space-around
-  .recommend-book
-    width px2rem(230)
+  div {
+    width: 33.33%;
+    display: inline-block;
+    text-align: center;
+    padding: 0 0 .8rem 0;
+    img{
+      width: 5rem;
+    }
+  }
 
 .scroll-ui {
   position: absolute;
