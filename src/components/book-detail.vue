@@ -31,7 +31,7 @@
 </template>
 <script>
 import { cats } from "api/cats"
-import { bookDes, statics, atoc, chapterApi } from "api"
+import { statics } from "api"
 import { openDB, addData, closeDB } from 'api/indexedDB.js'
 export default {
   name: 'book-detail',
@@ -49,15 +49,15 @@ export default {
   },
   methods: {
   	beginReady() {
-
+      this.$router.push({path: `/ready/${this.des._id}/${this.des.title}`})
   	},
   	addBookCase() {
-  	  this.getChapters().then(() => {
-  	  	this.dbHandle()
-  	  }, () => {
-  	  	this.$Message.error('Data acquisition failed!')
-  	  })
-      
+  	  // this.getChapters().then(() => {
+  	  // 	this.dbHandle()
+  	  // }, () => {
+  	  // 	this.$Message.error('Data acquisition failed!')
+  	  // })
+      this.dbHandle()
     },
     dbHandle() {    
       let indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.msIndexedDB
@@ -76,46 +76,20 @@ export default {
           keyPath: '_id'
         })
         
-        this.chapters.map((item, index) => {
-          this.getContent(item.link).then(res => {
-            addData({
-              db: this.db,
-              table: 'bookcontent',
-              tableSon: { link: item.link, bookId: this.des._id, title: item.title, content: res.body },
-              keyPath: 'link'
-            }).then(() => {
-              if (index === this.chapters.length - 1) {
-              	closeDB(db)
-              }
-            })
-          })
-        })
-      })
-    },
-    getChapters() {
-      return new Promise((resolve, reject) => {
-      	cats(`${atoc}/${this.des._id}?view=chapters`).then(res => {
-	      	if (res.ok) {
-	      	  this.chapters = res.mixToc.chapters
-	      	  resolve()
-	      	} else {
-	      	  reject()
-	      	}
-	      })
-      })
-    },
-    getContent (link) {
-      return new Promise((resolve, reject) => {
-        if (/(\.txt)$/.test(link)) {
-          link = link.replace(/http:\//, 'http:%2F').replace(/\?/, '%3F')
-        }
-        cats(chapterApi + link).then(chapterDes => {
-          if (chapterDes.ok) {
-            resolve(chapterDes.chapter)
-          } else {
-            reject()
-          }
-        })
+        // this.chapters.map((item, index) => {
+        //   this.getContent(item.link).then(res => {
+        //     addData({
+        //       db: this.db,
+        //       table: 'bookcontent',
+        //       tableSon: { link: item.link, bookId: this.des._id, title: item.title, content: res.body },
+        //       keyPath: 'link'
+        //     }).then(() => {
+        //       if (index === this.chapters.length - 1) {
+        //       	closeDB(db)
+        //       }
+        //     })
+        //   })
+        // })
       })
     }
   }

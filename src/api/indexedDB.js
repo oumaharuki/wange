@@ -28,6 +28,10 @@ export function openDB (version) {
   	  if (!db.objectStoreNames.contains('bookcase')) {
   	  	let objectStore = db.createObjectStore('bookcase', {keyPath: '_id', unique: false})
   	  }
+
+      if (!db.objectStoreNames.contains('readyrecord')) {
+        let objectStore = db.createObjectStore('readyrecord', {keyPath: 'id', unique: false})
+      }
   	  // resolve(db)
   	}
   })
@@ -90,12 +94,19 @@ export function getDataBySome (db, table, keyPath) {
   	return
   }
   return new Promise((resolve, reject) => {
+    let data = {}
   	let transaction = db.transaction(table, 'readwrite')
   	let store = transaction.objectStore(table)
 
   	let dataRequest = store.get(keyPath)
   	dataRequest.onsuccess = (e) => {
-  	  resolve(e.target.result)
+      const result = e.target.result
+      if (result && result !== null) {
+        data = result
+        resolve(data)
+      } else {
+        resolve(data)
+      }
   	}
 
   	dataRequest.onerror = (e) => {
@@ -128,5 +139,25 @@ export function getDataAll (db, table) {
   	dataRequest.onerror = (e) => {
   	  reject(e.target.error.message)
   	}
+  })
+}
+
+// 修改数据
+export function upData (db, table, data) {
+  // data = {key: val, key: val, ……}
+  if (!db || !table || !data) {
+    return
+  }
+  return new Promise((resolve, reject) => {
+    let transaction = db.transaction(table, 'readwrite')
+    let store = transaction.objectStore(table)
+
+    let upRequest = store.put(data)
+    upRequest.onsuccess = () => {
+      resolve()
+    }
+    upRequest.onerror = () => {
+      reject()
+    }
   })
 }
