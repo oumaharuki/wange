@@ -28,6 +28,9 @@ export default {
     // this.txtWidth = 14
   },
   activated() {
+    this.txtWidth = window.localStorage.getItem('font-zise') || 14
+    this.txtWidth = +this.txtWidth
+    this.lineHeight = this.txtWidth + 7
     let link = window.localStorage.getItem('ready-link')
     this.bookId = this.$route.params.id
     this.link = link
@@ -80,7 +83,7 @@ export default {
         // 获取章节
         return new Promise((resolve, reject) => {
           cats(`${atoc}/${this.bookId}?view=chapters`).then(res => {
-            console.log(res, 'res')
+            // console.log(res, 'res')
             if (res.ok) {
               const chapter = res.mixToc.chapters
               const arr = chapter.filter(item => item.link === this.link)

@@ -74,6 +74,10 @@ export default {
           table: 'bookcase',
           tableSon: { '_id': this.des._id, cover: this.des.cover, title: this.des.title },
           keyPath: '_id'
+        }).then(() => {
+          this.$Message.success(`${this.des.title}已成功加入您的书架`)
+        }, () => {
+          this.$Message.error(`加入书架操作失败或者当前书架已经存在您的书架当中！`)
         })
         
         // this.chapters.map((item, index) => {
