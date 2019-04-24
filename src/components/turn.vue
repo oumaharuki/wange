@@ -71,7 +71,7 @@
     <transition name='set-font' v-if='cacheShow'>
       <div class="set-cache">
         <div>
-          <p>共{{chapter.length}}章，已缓存0章</p>
+          <p>共{{chapter.length}}章，已缓存{{alreadyCache}}章</p>
           <p @click='cacheAfterSome'>缓存后面一百五十章</p>
           <p @click='cacheAfterAll'>缓存后面全部</p>
           <p @click='cacheAll'>缓存全部</p>
@@ -102,6 +102,7 @@
   import { cats } from "api/cats"
   import { bookDes, atoc, chapterApi } from "api"
   import Chapters from "components/chapters"
+  import { openDB, addData, closeDB, getDataAll } from 'api/indexedDB.js'
   const imgs=[
     {id:1,url:img1},
     {id:2,url:img2},
@@ -127,7 +128,8 @@
         showLinkBtn: false,
         current: -1,
         progressShow: false,
-        cacheShow: true
+        cacheShow: false,
+        alreadyCache: 0
       }
     },
     props: {
@@ -363,15 +365,60 @@
         this.progressShow = false
         this.setFontFlag = false
         this.menuShow = false
+        openDB(2.0).then(db => {
+          // alreadyCache
+          getDataAll(db, 'cache').then((data) => {
+            data.map(item => {
+              if (item.bookId === this.bookId) {
+                this.alreadyCache++
+              }
+            })
+          })
+          closeDB(db)
+        })
       },
       cacheAfterSome() {
         // 缓存后面一百五十章
+        openDB(2.0).then(db => {
+          for (let i = this.current + 1; i <= this.current + 150; i++) {
+            this.cacheDB(this.chapter[i], db)
+          }
+        })
       },
       cacheAfterAll() {
         // 缓存后面全部
+        openDB(2.0).then(db => {
+          for (let i = this.current + 1; i < this.chapter.length; i++) {
+            this.cacheDB(this.chapter[i], db)
+          }
+        })
       },
       cacheAll() {
         // 缓存全部
+        openDB(2.0).then(db => {
+          this.chapter.map(item => {
+            this.cacheDB(item, db)
+          })
+        })
+      },
+      cacheDB(item, db) {
+        let link = item.link
+        if (/(\.txt)$/.test(link)) {
+          link = link.replace(/http:\//, 'http:%2F').replace(/\?/, '%3F')
+        }
+        cats(chapterApi + link).then(chapterDes => {
+          if (chapterDes.ok) {
+            addData({
+              db: db,
+              table: 'cache',
+              tableSon: { 'id': item.link, 'body': chapterDes.chapter.body, 'bookId': this.bookId },
+              keyPath: 'id'
+            }).then(() => {
+            }, () => {
+              this.$Message.error(`${item.title}缓存失败`)
+            })
+          }
+        })
       },
       cacheCancel() {
         this.cacheShow = false
@@ -490,6 +537,9 @@
     p
       padding 10px;
       border-bottom 0.001rem solid #f1f2f7
+      &:first-of-type
+        font-weight: bolder
+        font-size .9rem
 
 .set-font
   bottom 50px

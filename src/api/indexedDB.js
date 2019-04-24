@@ -32,6 +32,10 @@ export function openDB (version) {
       if (!db.objectStoreNames.contains('readyrecord')) {
         let objectStore = db.createObjectStore('readyrecord', {keyPath: 'id', unique: false})
       }
+
+      if (!db.objectStoreNames.contains('cache')) {
+        let objectStore = db.createObjectStore('cache', {keyPath: 'id', unique: false})
+      }
   	  // resolve(db)
   	}
   })
