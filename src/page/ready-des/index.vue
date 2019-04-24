@@ -40,19 +40,39 @@ export default {
     init() {
       return new Promise((resolve, reject) => {
         openDB(2.0).then(db => {
-          getDataBySome(db, 'readyrecord', this.link).then(getData => {
-            if (getData && getData.body && getData.bookId === this.bookId) {
-              this.content = getData.body
-            } else {
-              this.content = ''
+          this.getDataByDB(db, 'readyrecord').then(() => {
+            this.getDataByDB(db, 'cache').then(() => {
               resolve()
               closeDB()
-            }
+            }, () => {
+              resolve()
+              closeDB()
+            })
           }, () => {
+            this.getDataByDB(db, 'cache').then(() => {
+              resolve()
+              closeDB()
+            }, () => {
+              resolve()
+              closeDB()
+            })
+          })
+        })
+      })
+    },
+    getDataByDB(db, table) {
+      return new Promise((resolve, reject) => {
+        getDataBySome(db, table, this.link).then(getData => {
+          if (getData && getData.body && getData.bookId === this.bookId) {
+            this.content = getData.body
+            closeDB()
+          } else {
             this.content = ''
             resolve()
-            closeDB()
-          })
+          }
+        }, () => {
+          this.content = ''
+          resolve()
         })
       })
     },

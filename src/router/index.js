@@ -76,7 +76,7 @@ export default new Router({
     },
     {
       path: '/search',
-      name: 'readyDes',
+      name: 'search',
       component: () => import('page/search')
     },
   ]

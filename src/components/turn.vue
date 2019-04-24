@@ -366,7 +366,6 @@
         this.setFontFlag = false
         this.menuShow = false
         openDB(2.0).then(db => {
-          // alreadyCache
           getDataAll(db, 'cache').then((data) => {
             data.map(item => {
               if (item.bookId === this.bookId) {
@@ -379,6 +378,9 @@
       },
       cacheAfterSome() {
         // 缓存后面一百五十章
+        if (this.alreadyCache === this.chapter.length) {
+          return
+        }
         openDB(2.0).then(db => {
           for (let i = this.current + 1; i <= this.current + 150; i++) {
             this.cacheDB(this.chapter[i], db)
@@ -387,6 +389,9 @@
       },
       cacheAfterAll() {
         // 缓存后面全部
+        if (this.alreadyCache === this.chapter.length) {
+          return
+        }
         openDB(2.0).then(db => {
           for (let i = this.current + 1; i < this.chapter.length; i++) {
             this.cacheDB(this.chapter[i], db)
@@ -395,6 +400,9 @@
       },
       cacheAll() {
         // 缓存全部
+        if (this.alreadyCache === this.chapter.length) {
+          return
+        }
         openDB(2.0).then(db => {
           this.chapter.map(item => {
             this.cacheDB(item, db)
@@ -402,6 +410,7 @@
         })
       },
       cacheDB(item, db) {
+        // 缓存
         let link = item.link
         if (/(\.txt)$/.test(link)) {
           link = link.replace(/http:\//, 'http:%2F').replace(/\?/, '%3F')
