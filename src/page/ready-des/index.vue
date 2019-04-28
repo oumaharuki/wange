@@ -28,6 +28,9 @@ export default {
     // this.txtWidth = 14
   },
   activated() {
+    this.txtWidth = window.localStorage.getItem('font-zise') || 14
+    this.txtWidth = +this.txtWidth
+    this.lineHeight = this.txtWidth + 7
     let link = window.localStorage.getItem('ready-link')
     this.bookId = this.$route.params.id
     this.link = link
@@ -37,19 +40,39 @@ export default {
     init() {
       return new Promise((resolve, reject) => {
         openDB(2.0).then(db => {
-          getDataBySome(db, 'readyrecord', this.link).then(getData => {
-            if (getData && getData.body && getData.bookId === this.bookId) {
-              this.content = getData.body
-            } else {
-              this.content = ''
+          this.getDataByDB(db, 'readyrecord').then(() => {
+            this.getDataByDB(db, 'cache').then(() => {
               resolve()
               closeDB()
-            }
+            }, () => {
+              resolve()
+              closeDB()
+            })
           }, () => {
+            this.getDataByDB(db, 'cache').then(() => {
+              resolve()
+              closeDB()
+            }, () => {
+              resolve()
+              closeDB()
+            })
+          })
+        })
+      })
+    },
+    getDataByDB(db, table) {
+      return new Promise((resolve, reject) => {
+        getDataBySome(db, table, this.link).then(getData => {
+          if (getData && getData.body && getData.bookId === this.bookId) {
+            this.content = getData.body
+            closeDB()
+          } else {
             this.content = ''
             resolve()
-            closeDB()
-          })
+          }
+        }, () => {
+          this.content = ''
+          resolve()
         })
       })
     },
@@ -80,7 +103,7 @@ export default {
         // 获取章节
         return new Promise((resolve, reject) => {
           cats(`${atoc}/${this.bookId}?view=chapters`).then(res => {
-            console.log(res, 'res')
+            // console.log(res, 'res')
             if (res.ok) {
               const chapter = res.mixToc.chapters
               const arr = chapter.filter(item => item.link === this.link)

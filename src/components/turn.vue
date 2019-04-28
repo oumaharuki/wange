@@ -2,7 +2,7 @@
   <div style="">
     <div id='turn-hgz' :style="{'font-size': txtWidth + 'px', 'line-height': lineHeight + 'px',height: '100%'}">
       <div class="content" v-for="(item, index) in page" style="padding: 0;height: 100%" :style="{background: 'url('+img+')'}">
-        <div style="line-height: 21px;padding: 30px 20px;height: 100%" v-html="item">
+        <div :style="{'line-height': lineHeight + 'px', 'padding': '30px 20px', 'height': '100%'}" v-html="item">
         </div>
       </div>
     </div>
@@ -22,13 +22,13 @@
         <div @click='showMenu'>
           目录
         </div>
-        <div>
+        <div @click='seeProgress'>
           进度
         </div>
         <div @click="setClick">
           设置
         </div>
-        <div>
+        <div @click='setCache'>
           缓存
         </div>
         <div>
@@ -40,9 +40,11 @@
     <transition name="set-font">
       <div class="set-font menu" v-if="setFontFlag">
         <h1>字体大小</h1>
-        <div class="font-slider"><span style="width: 50px;font-size: 16px" @click="fontSliderMinus">A-</span>
+        <div class="font-slider">
+          <span style="width: 50px;font-size: 16px" @click="fontSliderMinus">A-</span>
           <Slider v-model="fontSlider" :step="1" :max="40" :min="12" style="flex: 1;" @on-change="fontSliderChange"></Slider>
-          <span style="width: 50px;font-size: 16px" @click="fontSliderAdd">A+</span></div>
+          <span style="width: 50px;font-size: 16px" @click="fontSliderAdd">A+</span>
+        </div>
         <div class="set-img">
           <span v-for="item in imgs" :key="item.id" style="position: relative" @click="backgroundClick(item)">
             <img :src="item.url" alt="" :class="{'active':item.url==img}">
@@ -55,6 +57,26 @@
     <transition name='set-font' v-if='menuShow'>
       <div class="set-menu">
         <chapters :chapter=chapter></chapters>
+      </div>
+    </transition>
+    <!-- 进度 -->
+    <transition name='set-font' v-if='progressShow'>
+      <div class="set-font menu" style="height: 80px;">
+        <p class="cover-progress"></p>
+        <h1>{{chapter[current].title}}</h1>
+        <Slider v-model="current" :step="1" :max="chapter.length" :min="0" style="padding: 0 10px;"></Slider>
+      </div>
+    </transition>
+    <!-- 缓存 -->
+    <transition name='set-font' v-if='cacheShow'>
+      <div class="set-cache">
+        <div>
+          <p>共{{chapter.length}}章，已缓存{{alreadyCache}}章</p>
+          <p @click='cacheAfterSome'>缓存后面一百五十章</p>
+          <p @click='cacheAfterAll'>缓存后面全部</p>
+          <p @click='cacheAll'>缓存全部</p>
+          <p @click='cacheCancel'>取消</p>
+        </div>
       </div>
     </transition>
     <!-- 上下章跳转 -->
@@ -80,6 +102,7 @@
   import { cats } from "api/cats"
   import { bookDes, atoc, chapterApi } from "api"
   import Chapters from "components/chapters"
+  import { openDB, addData, closeDB, getDataAll } from 'api/indexedDB.js'
   const imgs=[
     {id:1,url:img1},
     {id:2,url:img2},
@@ -103,7 +126,10 @@
         menuShow: false,
         title: '',
         showLinkBtn: false,
-        current: -1
+        current: -1,
+        progressShow: false,
+        cacheShow: false,
+        alreadyCache: 0
       }
     },
     props: {
@@ -225,19 +251,23 @@
         const wleft=wcenter/3;
         const wright=wcenter+wcenter/3;
         if(e.clientX<=wleft){
-          if(this.setFontFlag || this.menuFlag || this.menuShow){
+          if(this.setFontFlag || this.menuFlag || this.menuShow || this.progressShow || this.cacheShow){
             this.setFontFlag=false;
             this.menuFlag=false;
             this.menuShow = false
+            this.progressShow = false
+            this.cacheShow = false
             return
           }
           this.pagePre();
         }
         if(e.clientX>=wright){
-          if(this.setFontFlag||this.menuFlag || this.menuShow){
+          if(this.setFontFlag||this.menuFlag || this.menuShow || this.progressShow || this.cacheShow){
             this.setFontFlag=false;
             this.menuFlag=false;
             this.menuShow = false
+            this.progressShow = false
+            this.cacheShow = false
             return
           }
           this.pageNext();
@@ -246,19 +276,23 @@
         const ytop=ycenter/3;
         const ybottom=ycenter+ycenter/3;
         if(e.clientY<=ytop&&e.clientX>wleft&&e.clientX<wright){
-          if(this.setFontFlag||this.menuFlag || this.menuShow){
+          if(this.setFontFlag||this.menuFlag || this.menuShow || this.progressShow || this.cacheShow){
             this.setFontFlag=false;
             this.menuFlag=false;
             this.menuShow = false
+            this.progressShow = false
+            this.cacheShow = false
             return
           }
           this.pagePre();
         }
         if(e.clientY>=ybottom&&e.clientX>wleft&&e.clientX<wright){
-          if(this.setFontFlag||this.menuFlag || this.menuShow){
+          if(this.setFontFlag||this.menuFlag || this.menuShow || this.progressShow || this.cacheShow){
             this.setFontFlag=false;
             this.menuFlag=false;
             this.menuShow = false
+            this.progressShow = false
+            this.cacheShow = false
             return
           }
           this.pageNext();
@@ -268,6 +302,10 @@
             this.setFontFlag=false;
           }else if (this.menuShow) {
             this.menuShow = false;
+          } else if (this.progressShow) {
+            this.progressShow = false
+          } else if (this.cacheShow) {
+            this.cacheShow = false
           } else {
             this.menuFlag=!this.menuFlag;
           }
@@ -291,7 +329,8 @@
         this.turnPage.turn('previous');
       },
       fontSliderChange(data){
-        console.log(data);
+        window.localStorage.setItem('font-zise', data)
+        window.history.go(0)
       },
       fontSliderMinus(){
        this.fontSlider--;
@@ -305,11 +344,93 @@
       },
       setClick(){
        this.setFontFlag=true;
+       this.progressShow = false
        this.menuShow = false
+       this.cacheShow = false
       },
       showMenu() {
         this.setFontFlag = false
+        this.progressShow = false
         this.menuShow = true
+        this.cacheShow = false
+      },
+      seeProgress() {
+        this.progressShow = true
+        this.setFontFlag = false
+        this.menuShow = false
+        this.cacheShow = false
+      },
+      setCache() {
+        this.cacheShow = true
+        this.progressShow = false
+        this.setFontFlag = false
+        this.menuShow = false
+        openDB(2.0).then(db => {
+          getDataAll(db, 'cache').then((data) => {
+            data.map(item => {
+              if (item.bookId === this.bookId) {
+                this.alreadyCache++
+              }
+            })
+          })
+          closeDB(db)
+        })
+      },
+      cacheAfterSome() {
+        // 缓存后面一百五十章
+        if (this.alreadyCache === this.chapter.length) {
+          return
+        }
+        openDB(2.0).then(db => {
+          for (let i = this.current + 1; i <= this.current + 150; i++) {
+            this.cacheDB(this.chapter[i], db)
+          }
+        })
+      },
+      cacheAfterAll() {
+        // 缓存后面全部
+        if (this.alreadyCache === this.chapter.length) {
+          return
+        }
+        openDB(2.0).then(db => {
+          for (let i = this.current + 1; i < this.chapter.length; i++) {
+            this.cacheDB(this.chapter[i], db)
+          }
+        })
+      },
+      cacheAll() {
+        // 缓存全部
+        if (this.alreadyCache === this.chapter.length) {
+          return
+        }
+        openDB(2.0).then(db => {
+          this.chapter.map(item => {
+            this.cacheDB(item, db)
+          })
+        })
+      },
+      cacheDB(item, db) {
+        // 缓存
+        let link = item.link
+        if (/(\.txt)$/.test(link)) {
+          link = link.replace(/http:\//, 'http:%2F').replace(/\?/, '%3F')
+        }
+        cats(chapterApi + link).then(chapterDes => {
+          if (chapterDes.ok) {
+            addData({
+              db: db,
+              table: 'cache',
+              tableSon: { 'id': item.link, 'body': chapterDes.chapter.body, 'bookId': this.bookId },
+              keyPath: 'id'
+            }).then(() => {
+            }, () => {
+              this.$Message.error(`${item.title}缓存失败`)
+            })
+          }
+        })
+      },
+      cacheCancel() {
+        this.cacheShow = false
       },
       getChapters() {
         // 获取章节
@@ -407,6 +528,27 @@
   overflow-y: auto
   background #000
   z-index 200
+.set-cache
+  position fixed
+  top 0;
+  height 100%;
+  left 0;
+  width 100%;
+  z-index 200
+  background rgba(0, 0, 0, 0.5)
+  div
+    background #fff
+    position absolute;
+    top 50%;
+    left 20px;
+    right 20px;
+    transform: translateY(-50%);
+    p
+      padding 10px;
+      border-bottom 0.001rem solid #f1f2f7
+      &:first-of-type
+        font-weight: bolder
+        font-size .9rem
 
 .set-font
   bottom 50px
@@ -432,6 +574,7 @@
     justify-content space-between
     align-items center
     padding 0 10px
+    overflow-x auto
     img
       width 90px
       height 50px
@@ -520,5 +663,13 @@
   .next {
     text-align: right;
   }
+}
+.cover-progress{
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1111;
 }
 </style>

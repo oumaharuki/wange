@@ -1,9 +1,9 @@
 <template>
     <div>
-      <top>
+      <top class='nav-top'>
         <slot>搜索</slot>
       </top>
-      <div class="search">
+      <div class="search" :style="{'margin-top': h + 'px'}">
         <Input v-model="searchStr" :on-change="onChange" style="flex: 1"></Input>
         <Button text="搜索"
          @click="search" style="margin-left: 10px"></Button>
@@ -32,8 +32,12 @@
       data(){
           return {
             searchStr:"",
-            searchData: []
+            searchData: [],
+            h: 0
           }
+      },
+      mounted() {
+        this.h = document.getElementsByClassName('nav-top')[0].offsetHeight
       },
       methods:{
         search(){
@@ -49,6 +53,13 @@
 </script>
 
 <style scoped lang="stylus">
+.nav-top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+}
 .search
   display flex
   flex-direction row
