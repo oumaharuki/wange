@@ -27,6 +27,9 @@
       created() {
         this.init()
       },
+      mounted() {
+        document.getElementsByClassName('ivu-scroll-container')[0].style.height = '100%'
+      },
       filters:{
         hotRecommend(data){
           return data[4]
@@ -57,10 +60,6 @@
 .store-head
   .store-banner
     margin-bottom px2rem(60)
-
-.ivu-scroll-container {
-  height: 100% !important;
-}
 
 .scroll-ui {
   position: absolute;
